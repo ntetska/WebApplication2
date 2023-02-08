@@ -10,7 +10,7 @@ public class ApplicationDbContext : DbContext
     {
     }
     public DbSet<User> User { get; set; }
-    public DbSet<Request> Request { get; set; }
+    public DbSet<RegistrationRequest> Request { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

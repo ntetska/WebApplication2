@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Nest;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using WebApplication2.Domain;
@@ -9,59 +8,60 @@ using WebApplication2.Services;
 
 namespace WebApplication2.Controllers
 {
-    [ApiController]
     public class UserController
         : Controller
     {
-        private readonly Services.IRepository<User> _userService;
+        private readonly  IRepository<User> _userRepository;
 
-        public UserController(Services.IRepository<User> userService)
+        public UserController(IRepository<User> userRepository)
         {
-            _userService = userService;
+            _userRepository = userRepository;
         }
 
-        [HttpGet("/User")]
         public async Task<IActionResult> Index()
         {
-
-            return View(await _userService.GetAllAsync());
+            return View(await _userRepository.GetAllAsync());
         }
 
-        [HttpGet("/User/Register")]
-        public string Register()
+        public IActionResult Register()
         {
-            return "You have registered!";
-            //return View();
+
+            return View();
         }
 
-        [HttpPost("/User/Register")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public string Register(User user)
+        public async Task<IActionResult> Register([Bind("Id,FirstName,LastName,Number,Email,Username,Password,Role,Manager_Id")] Domain.User user, object firstName)
         {
 
-            //if (ModelState.IsValid)
-            //{
-            //    await _userService.AddAsync(user);
+            if (!ModelState.IsValid)
+            {
+                return View(user);
+            }
 
-            //    return RedirectToAction(nameof(Index));
-            //}
-            return "Success!";
+            if(user.Password == null)
+            {
+                return View(user);
+            }
+
+            await _userRepository.AddAsync(user);
+
+            return RedirectToAction(nameof(Index));
         }
-        [HttpGet("/User/Login")]
+
         public IActionResult Login()
         {
             return View();
         }
 
-        [HttpPost("/User/Login")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Id,Username,Password")] Domain.User user)
         {
 
-            return BadRequest("Wrong password");
             if (ModelState.IsValid)
             {
-                await _userService.AddAsync(user);
+                await _userRepository.AddAsync(user);
 
                 return RedirectToAction(nameof(Index));
             }

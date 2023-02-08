@@ -1,25 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApplication2.Domain;
 using WebApplication2.Services;
 
 
 namespace WebApplication2.Persistance
-{
-    public class UserRepository : IRepository<User>
+{  
+    public class RequestRepository : IRepository<RegistrationRequest>
     {
         private readonly ApplicationDbContext _context;
+        private User applicant;
 
-        public object FirstName { get; private set; }
-
-        public UserRepository(ApplicationDbContext context)
+        public RequestRepository(ApplicationDbContext context)
         {
             _context = context;
         }
-        public async Task<bool> AddAsync(User user)
+        public async Task<bool> AddAsync(RegistrationRequest request)
         {
             try
             {
-                await _context.User.AddAsync(user);
+                await _context.Request.AddAsync(request);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -28,21 +28,21 @@ namespace WebApplication2.Persistance
                 return false;
             }
         }
-        public async Task<List<User>> GetAllAsync()
+        public async Task<List<RegistrationRequest>> GetAllAsync()
         {
-            var result = await _context.User.ToListAsync();
+            var result = await _context.Request.ToListAsync();
             return result;
         }
-        public async Task<User> GetByIdAsync(int id)
+        public async Task<RegistrationRequest> GetByIdAsync(int id)
         {
-            var result = await _context.User.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var result = await _context.Request.Where(r => r.Id == id).FirstOrDefaultAsync();
             return result;
         }
-        public async Task<bool> UpdateAsync(User user)
+        public async Task<bool> UpdateAsync(RegistrationRequest request)
         {
             try
             {
-                _context.User.Update(user);
+                _context.Request.Update(request);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -56,10 +56,10 @@ namespace WebApplication2.Persistance
         {
             try
             {
-                var result = await _context.User.Where(k => k.Id == id).FirstOrDefaultAsync();
+                var result = await _context.Request.Where(e =>e.Id == id).FirstOrDefaultAsync();
                 if (id != null)
                 {
-                    _context.User.Remove(result);
+                    _context.Request.Remove(result);
                     await _context.SaveChangesAsync();
                 }
                 return true;
@@ -71,6 +71,5 @@ namespace WebApplication2.Persistance
             }
 
         }
-
     }
 }

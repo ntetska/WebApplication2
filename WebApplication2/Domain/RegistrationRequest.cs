@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace WebApplication2.Domain
 {
-    public class Request
+    public class RegistrationRequest
     {
         [Key]
         public int Id { get; set; }
@@ -13,6 +13,7 @@ namespace WebApplication2.Domain
         //public string Username { get; set; }
         public DateTime Date { get; set; } = DateTime.Now;
         public RequestCondition Condition { get; set; } = RequestCondition.Pending;
+
     }
 
     public enum RequestCondition

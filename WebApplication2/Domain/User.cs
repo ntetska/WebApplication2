@@ -18,7 +18,7 @@ namespace WebApplication2.Domain
         public User? Manager { get; set; }
         public IEnumerable<User> ManagedUsers { get; set; } = Enumerable.Empty<User>();
         public string? ManagerUsername { get; set; }
-        public Request? Request { get; set; }
+        public RegistrationRequest? Request { get; set; }
         public bool IsActive { get; set; } = false;
     }
 

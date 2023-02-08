@@ -6,6 +6,8 @@ namespace WebApplication2.Services
     {
         Task<bool> AddAsync(T model);
         Task<List<T>> GetAllAsync();
-        Task<T> GetByIdAsync(string username);
+        Task<bool> UpdateAsync(T model);
+        Task<T> GetByIdAsync(int id);
+        Task<bool> DeleteAsync(int id);
     }
 }
