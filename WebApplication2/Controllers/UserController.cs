@@ -11,7 +11,7 @@ namespace WebApplication2.Controllers
     public class UserController
         : Controller
     {
-        private readonly  IRepository<User> _userRepository;
+        private readonly IRepository<User> _userRepository;
 
         public UserController(IRepository<User> userRepository)
         {

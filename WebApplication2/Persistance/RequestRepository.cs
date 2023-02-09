@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Domain;
 using WebApplication2.Services;
@@ -15,17 +16,17 @@ namespace WebApplication2.Persistance
         {
             _context = context;
         }
-        public async Task<bool> AddAsync(RegistrationRequest request)
+        public async Task<RegistrationRequest?> AddAsync(RegistrationRequest request)
         {
             try
             {
                 await _context.Request.AddAsync(request);
                 await _context.SaveChangesAsync();
-                return true;
+                return request;
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
         }
         public async Task<List<RegistrationRequest>> GetAllAsync()
@@ -38,21 +39,21 @@ namespace WebApplication2.Persistance
             var result = await _context.Request.Where(r => r.Id == id).FirstOrDefaultAsync();
             return result;
         }
-        public async Task<bool> UpdateAsync(RegistrationRequest request)
+        public async Task<RegistrationRequest> UpdateAsync(RegistrationRequest request)
         {
             try
             {
                 _context.Request.Update(request);
                 await _context.SaveChangesAsync();
-                return true;
+                return request;
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
 
         }
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<RegistrationRequest> DeleteAsync(int id)
         {
             try
             {
@@ -62,12 +63,12 @@ namespace WebApplication2.Persistance
                     _context.Request.Remove(result);
                     await _context.SaveChangesAsync();
                 }
-                return true;
+                return result;
             }
             catch (Exception ex)
             {
 
-                return false;
+                return null;
             }
 
         }

@@ -12,7 +12,7 @@ namespace WebApplication2.Domain
         public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int Number { get; set; }
+        public string Number { get; set; }
         public string? Email { get; set; }
         public UserRole Role { get; set; } = UserRole.User;
         public User? Manager { get; set; }

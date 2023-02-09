@@ -1,13 +1,14 @@
-﻿using WebApplication2.Domain;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using WebApplication2.Domain;
 
 namespace WebApplication2.Services
 {
     public interface IRepository<T>
     {
-        Task<bool> AddAsync(T model);
+        Task<T?> AddAsync(T model);
         Task<List<T>> GetAllAsync();
-        Task<bool> UpdateAsync(T model);
+        Task<T> UpdateAsync(T model);
         Task<T> GetByIdAsync(int id);
-        Task<bool> DeleteAsync(int id);
+        Task<T> DeleteAsync(int id);
     }
 }

@@ -15,17 +15,17 @@ namespace WebApplication2.Persistance
         {
             _context = context;
         }
-        public async Task<bool> AddAsync(User user)
+        public async Task<User?> AddAsync(User user)
         {
             try
             {
                 await _context.User.AddAsync(user);
                 await _context.SaveChangesAsync();
-                return true;
+                return user;
             }
-            catch (Exception ex)
+            catch
             {
-                return false;
+                return null;
             }
         }
         public async Task<List<User>> GetAllAsync()
@@ -38,21 +38,21 @@ namespace WebApplication2.Persistance
             var result = await _context.User.Where(e => e.Id == id).FirstOrDefaultAsync();
             return result;
         }
-        public async Task<bool> UpdateAsync(User user)
+        public async Task<User> UpdateAsync(User user)
         {
             try
             {
                 _context.User.Update(user);
                 await _context.SaveChangesAsync();
-                return true;
+                return user;
             }
-            catch (Exception ex)
+            catch
             {
-                return false;
+                return null;
             }
 
         }
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<User> DeleteAsync(int id)
         {
             try
             {
@@ -62,12 +62,12 @@ namespace WebApplication2.Persistance
                     _context.User.Remove(result);
                     await _context.SaveChangesAsync();
                 }
-                return true;
+                return result;
             }
-            catch (Exception ex)
+            catch
             {
 
-                return false;
+                return null;
             }
 
         }
