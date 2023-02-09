@@ -27,7 +27,7 @@ namespace WebApplication2.Controllers
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(RegistrationRequest request)
         {
             if (!ModelState.IsValid)
@@ -44,7 +44,7 @@ namespace WebApplication2.Controllers
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(RegistrationRequest request)
         {
             if (!ModelState.IsValid)
@@ -61,7 +61,7 @@ namespace WebApplication2.Controllers
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(RegistrationRequest request)
         {
             if (!ModelState.IsValid)

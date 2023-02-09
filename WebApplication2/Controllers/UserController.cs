@@ -23,15 +23,22 @@ namespace WebApplication2.Controllers
             return View(await _userRepository.GetAllAsync());
         }
 
+        [HttpGet]
         public IActionResult Register()
         {
-
             return View();
         }
 
+        public async Task<List<User>> GetAll()
+        {
+            return await _userRepository.GetAllAsync();
+        }
+
+
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("Id,FirstName,LastName,Number,Email,Username,Password,Role,Manager_Id")] Domain.User user, object firstName)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(User user)
         {
 
             if (!ModelState.IsValid)
@@ -61,11 +68,16 @@ namespace WebApplication2.Controllers
 
             if (ModelState.IsValid)
             {
-                await _userRepository.AddAsync(user);
-
-                return RedirectToAction(nameof(Index));
+                return View(user);
             }
-            return View(user);
+            if (user.IsActive == true) 
+            {
+                return View(user);
+            }
+            await _userRepository.AddAsync(user);
+
+            return RedirectToAction(nameof(Index));
+         
         }
     }
 }
