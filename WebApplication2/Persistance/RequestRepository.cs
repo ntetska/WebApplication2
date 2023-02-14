@@ -29,7 +29,7 @@ namespace WebApplication2.Persistance
                 return null;
             }
         }
-        public async Task<List<RegistrationRequest>> GetAllAsync()
+        public async Task<List<RegistrationRequest>?> GetAllAsync()
         {
             var result = await _context.Request.ToListAsync();
             return result;

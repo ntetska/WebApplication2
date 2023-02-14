@@ -1,9 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WebApplication2.Domain;
-using WebApplication2.Services;
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext :DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -15,6 +13,9 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>().HasOne(a => a.Manager).WithMany(a => a.ManagedUsers).IsRequired(false);
-        modelBuilder.Entity<User>().HasOne(a => a.Request).WithOne(a => a.Applicant).IsRequired(false);
+        modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
+        modelBuilder.Entity<User>().Property(u => u.Username).HasColumnType("nvarchar(255)");
+        modelBuilder.Entity<User>().HasOne(a => a.Request).WithOne(a => a.Applicant).IsRequired(false).OnDelete(DeleteBehavior.Cascade);
     }
+
 }

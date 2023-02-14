@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApplication2.Domain;
 using WebApplication2.Services;
 
@@ -15,7 +16,7 @@ namespace WebApplication2.Persistance
         {
             _context = context;
         }
-        public async Task<User?> AddAsync(User user)
+        public async Task<User> AddAsync(User user)
         {
             try
             {
@@ -57,12 +58,13 @@ namespace WebApplication2.Persistance
             try
             {
                 var result = await _context.User.Where(k => k.Id == id).FirstOrDefaultAsync();
-                if (id != null)
+                if (result != null)
                 {
                     _context.User.Remove(result);
                     await _context.SaveChangesAsync();
                 }
                 return result;
+
             }
             catch
             {

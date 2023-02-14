@@ -10,7 +10,6 @@ namespace WebApplication2.Domain
         public int Id { get; set; }
         public User Applicant { get; set; }
         public int ApplicantId { get; set; }
-        //public string Username { get; set; }
         public DateTime Date { get; set; } = DateTime.Now;
         public RequestCondition Condition { get; set; } = RequestCondition.Pending;
 
