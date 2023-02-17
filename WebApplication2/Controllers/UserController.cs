@@ -40,6 +40,12 @@ namespace WebApplication2.Controllers
         {
             return View(await _userRepository.GetAllAsync());
         }
+        [HttpGet("/GetAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            var users = await _userRepository.GetAllAsync();
+            return Ok(users);
+        }
         public IActionResult Create()
         {
             return View();
