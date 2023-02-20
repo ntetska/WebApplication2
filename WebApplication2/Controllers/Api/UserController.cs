@@ -17,29 +17,19 @@ namespace WebApplication2.Controllers.Api
             _userRepository = userRepository;
             _requestRepository = requestRepository;
         }
-        [HttpGet("/GetSingle")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetSingle(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
             return Ok(user);
         }
-        [HttpGet("/Index")]
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
             var users = await _userRepository.GetAllAsync();
             return Ok(users);
         }
-        //[HttpGet("/GetAll")]
-        //public async Task<IActionResult> GetAll()
-        //{
-        //    var users = await _userRepository.GetAllAsync();
-        //    return Ok(users);
-        //}
-        //public IActionResult Create()
-        //{
-        //    return Ok();
-        //}
-        [HttpPost("/Create")]
+        [HttpPost("Create")]
         public async Task<IActionResult> Create([Bind("Id,Username,Password,FirstName,LastName,Number,Email")] User user)
         {
             RegistrationRequest request = new RegistrationRequest();
@@ -82,21 +72,7 @@ namespace WebApplication2.Controllers.Api
             }
             return Ok(user);
         }
-        //public async Task<IActionResult> Update(int id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var user = await _userRepository.GetByIdAsync(id);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(user);
-        //}
-        [HttpPut("/Update")]
+        [HttpPut("Update")]
         public async Task<IActionResult> Update([Bind("Id,Username,Password,FirstName,LastName,Number,Email")] User user)
         {
             if (user.Username == string.Empty)
@@ -129,32 +105,15 @@ namespace WebApplication2.Controllers.Api
 
             return Ok(user);
         }
-        [HttpDelete("/Delete/{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _userRepository.GetByIdAsync(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(user);
-        }
-        [HttpPost, ActionName("/Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var user = await _userRepository.DeleteAsync(id);
-            if (user == null)
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
-            return Ok(user);
-        }
-    }
+		[HttpDelete("Delete/{id}")]
+		public async Task<IActionResult> Delete(int id)
+		{
+			User user = await _userRepository.DeleteAsync(id);
+			if (user == null)
+			{
+				return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+			}
+			return Ok(user);
+		}
+	}
 }

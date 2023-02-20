@@ -8,10 +8,12 @@ public class ApplicationDbContext :DbContext
     {
     }
     public DbSet<User> User { get; set; }
+
     public DbSet<RegistrationRequest> Request { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         modelBuilder.Entity<User>().HasOne(a => a.Manager).WithMany(a => a.ManagedUsers).IsRequired(false);
         modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
         modelBuilder.Entity<User>().Property(u => u.Username).HasColumnType("nvarchar(255)");

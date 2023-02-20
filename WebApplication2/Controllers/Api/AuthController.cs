@@ -51,4 +51,10 @@ public class AuthController : ControllerBase
         await HttpContext.SignOutAsync(
             CookieAuthenticationDefaults.AuthenticationScheme);
     }
+	[Authorize(Roles = "Admin")]
+	[HttpGet("Test")]
+	public string TestingAuth()
+	{
+		return "Success!";
+	}
 }
