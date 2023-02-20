@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace WebApplication2.Controllers;
-
+namespace WebApplication2.Controllers.Api;
 [Route("api/[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
@@ -14,6 +14,7 @@ public class AuthController : ControllerBase
     {
         _context = context;
     }
+    [AllowAnonymous]
     [HttpPost("Login")]
     public async Task<IActionResult> Login([FromForm] string username, [FromForm] string password)
     {
@@ -24,7 +25,7 @@ public class AuthController : ControllerBase
             return BadRequest();
         }
 
-        if(user.IsActive == false)
+        if (user.IsActive == false)
         {
             return BadRequest();
         }

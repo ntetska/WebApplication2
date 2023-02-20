@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using WebApplication2.Domain;
 using WebApplication2.Services;
 
-namespace WebApplication2.Controllers
-{ 
-    public class UserController : Controller
+namespace WebApplication2.Controllers.Api
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
     {
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<RegistrationRequest> _requestRepository;
@@ -33,11 +35,11 @@ namespace WebApplication2.Controllers
         //    var users = await _userRepository.GetAllAsync();
         //    return Ok(users);
         //}
-        public IActionResult Create()
-        {
-            return View();
-        }
-        [HttpPost]
+        //public IActionResult Create()
+        //{
+        //    return Ok();
+        //}
+        [HttpPost("/Create")]
         public async Task<IActionResult> Create([Bind("Id,Username,Password,FirstName,LastName,Number,Email")] User user)
         {
             RegistrationRequest request = new RegistrationRequest();
@@ -78,24 +80,23 @@ namespace WebApplication2.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return Ok(user);
         }
-        public async Task<IActionResult> Update(int id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Update(int id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var user = await _userRepository.GetByIdAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return View(user);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        //    var user = await _userRepository.GetByIdAsync(id);
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(user);
+        //}
+        [HttpPut("/Update")]
         public async Task<IActionResult> Update([Bind("Id,Username,Password,FirstName,LastName,Number,Email")] User user)
         {
             if (user.Username == string.Empty)
@@ -126,8 +127,9 @@ namespace WebApplication2.Controllers
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
 
-            return View(user);
+            return Ok(user);
         }
+        [HttpDelete("/Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             if (id == null)
@@ -142,20 +144,17 @@ namespace WebApplication2.Controllers
                 return NotFound();
             }
 
-            return RedirectToAction(nameof(Index));
+            return Ok(user);
         }
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-
+        [HttpPost, ActionName("/Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var user = await _userRepository.DeleteAsync(id);
-            //if (user == null)
-            //{
-            //    return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            //}
-            return RedirectToAction(nameof(Index));
+            if (user == null)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            return Ok(user);
         }
     }
 }
-
