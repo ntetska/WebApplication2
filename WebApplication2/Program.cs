@@ -28,9 +28,10 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<UserRepository, UserRepository>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IRepository<RegistrationRequest>, RequestRepository>();
-
+builder.Services.AddScoped<PasswordHasher<User>>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddSwaggerGen();

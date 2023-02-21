@@ -25,34 +25,52 @@ namespace WebApplication2.Controllers.Api
             return Ok(request);
 
         }
-        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllAsync()
         {
             var requests = await _requestRepository.GetAllAsync();
             return Ok(requests);
         }
-        [HttpPut("Update")]
-        [Authorize(Policy = "Admin")]
-        public async Task<IActionResult> Update(RegistrationRequest request)
+        [Authorize(Roles = "Admin")]
+        [HttpPut("Update/{id}")]
+        public async Task<IActionResult> Update([FromForm] bool? toukan, int id)
         {
-            request = await _requestRepository.UpdateAsync(request);
+            if (toukan == null)
+                return BadRequest();
+            RegistrationRequest request = await _requestRepository.GetByIdAsync(id);
 
             if (request == null)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
+            if (request.Condition != RequestCondition.Pending)
+            {
+                return BadRequest("The request is not pending");
+            }
+            if (toukan == true)
+            {
+                request.Condition = RequestCondition.Accepted;
+                User userToBeActive = await _userRepository.GetByIdAsync(request.ApplicantId);
+                userToBeActive.IsActive = true;
+                userToBeActive = await _userRepository.UpdateAsync(userToBeActive);
+                if (userToBeActive == null)
+                {
+                    return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                }
+            }
+            else
+            {
+                request.Condition = RequestCondition.Rejected;  
+            }
+
+            request = await _requestRepository.UpdateAsync(request);
 
             if (request.Condition == RequestCondition.Rejected)
             {
                 return Ok("the request is rejected!");
             }
-            User userToBeActive = await _userRepository.GetByIdAsync(request.ApplicantId);
-            userToBeActive.IsActive = true;
-            userToBeActive = await _userRepository.UpdateAsync(userToBeActive);
-            if (userToBeActive == null)
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
+           
             return Ok(request);
         }
         [HttpDelete("Delete/{id}")]

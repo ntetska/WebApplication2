@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 using WebApplication2.Domain;
 using WebApplication2.Services;
 
@@ -39,6 +41,11 @@ namespace WebApplication2.Persistance
             var result = await _context.User.Where(e => e.Id == id).FirstOrDefaultAsync();
             return result;
         }
+        public async Task<User> GetByUsernameAsync(string username)
+        {
+            var result = await _context.User.Where(u => u.Username == username).FirstOrDefaultAsync();
+            return result;
+        }
         public async Task<User> UpdateAsync(User user)
         {
             try
@@ -73,6 +80,5 @@ namespace WebApplication2.Persistance
             }
 
         }
-
     }
 }

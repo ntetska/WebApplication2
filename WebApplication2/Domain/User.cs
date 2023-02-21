@@ -8,8 +8,6 @@ using System.Globalization;
 
 namespace WebApplication2.Domain
 {
-    //[Index(nameof(Username),IsUnique = true)]
-
     public class User
     {
         [Key]
@@ -28,6 +26,36 @@ namespace WebApplication2.Domain
         public string? ManagerUsername { get; set; }
         public RegistrationRequest? Request { get; set; }
         public bool IsActive { get; set; } = false;
+
+        public void ToDTO(UserDTO userDto)
+        {
+            userDto.Username = Username;
+            userDto.Password = Password;
+            userDto.FirstName = FirstName;
+            userDto.LastName = LastName;
+            userDto.Number = Number;
+            userDto.Email = Email;
+        }
+    }
+
+    public class UserDTO
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Number { get; set; }
+        public string? Email { get; set; }
+
+        public void ToModel(User user)
+        {
+            user.Username = Username;
+            user.Password = Password;
+            user.FirstName = FirstName;
+            user.LastName = LastName;
+            user.Number = Number;
+            user.Email = Email;
+        }
     }
 
     public enum UserRole
