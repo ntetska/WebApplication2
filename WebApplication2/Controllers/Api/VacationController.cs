@@ -37,33 +37,41 @@ namespace WebApplication2.Controllers.Api
         public async Task<IActionResult> Create(VacationDto vacation)
         {
             User petitioner = await _userRepository.GetByIdAsync(vacation.PetitionerId);
-            Vacation toukan = vacation.ToModel(petitioner);
-            toukan = await _vacationRepository.AddAsync(toukan);
-            if (toukan == null)
+            Vacation vacationRequest = vacation.ToModel(petitioner);
+            vacationRequest = await _vacationRepository.AddAsync(vacationRequest);
+            if (vacationRequest == null)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-            return Ok(toukan);
+            return Ok(vacationRequest);
         }
         [Authorize(Roles = "Manager")]
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> Update([FromForm] bool status, int id)
         {
-            //if (status == null)
-            //    return BadRequest();
+            
             Vacation vacation = await _vacationRepository.GetByIdAsync(id);
             if (vacation == null)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
+
             if (vacation.Status != VacationStatus.Pending)
             {
                 return BadRequest("The request is not pending");
             }
-            if (status == true)
+
+            if (status)
             {
                 vacation.Status = VacationStatus.Accepted;
+                //int TotalDays = 
             }
+
+            if (!status)
+            {
+                vacation.Status = VacationStatus.Rejected;
+            }
+
             vacation = await _vacationRepository.UpdateAsync(vacation);
             return Ok(vacation);
         }

@@ -11,7 +11,8 @@ namespace WebApplication2.Domain {
         public int PetitionerId { get; set; }
         public DateTime BeginningDate { get; set; }
         public DateTime EndingDate { get; set; }
-        //public int RestOfVacation { get; set; }
+        public int RestOfVacation { get; set; }
+        public VacationType Type { get; set; } = VacationType.RegularLeave;
         public VacationStatus Status { get; set; } = VacationStatus.Pending;
     }
     public class VacationDto 
@@ -19,16 +20,16 @@ namespace WebApplication2.Domain {
         public int PetitionerId { get; set; }
         public DateTime BeginningDate { get; set; }
         public DateTime EndingDate { get; set; }
-        public Vacation ToModel(User user) 
+        public Vacation ToModel(User user)
         {
 
-            Vacation vacation = new Vacation() 
-            { 
+            Vacation vacation = new Vacation()
+            {
                 Petitioner = user,
                 PetitionerId = PetitionerId,
-                BeginningDate = BeginningDate,  
+                BeginningDate = BeginningDate,
                 EndingDate = EndingDate
-            }; 
+            };
             return vacation;
         }
 
@@ -38,5 +39,12 @@ namespace WebApplication2.Domain {
         Pending,
         Accepted,
         Rejected
+    }
+    public enum VacationType
+    {
+        RegularLeave,
+        MaternityLeave,
+        StudentPermit,
+        UnpaidLeave
     }
 }

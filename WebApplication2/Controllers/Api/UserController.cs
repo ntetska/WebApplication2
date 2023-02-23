@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Cryptography;
 using WebApplication2.Domain;
-using WebApplication2.Persistance;
 using WebApplication2.Services;
 
 namespace WebApplication2.Controllers.Api
@@ -31,7 +26,7 @@ namespace WebApplication2.Controllers.Api
             var user = await _userRepository.GetByIdAsync(id);
             return Ok(user);
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
@@ -90,7 +85,7 @@ namespace WebApplication2.Controllers.Api
         [HttpPut("AUpdate/{id}")]
         public async Task<IActionResult> Update([FromForm] UserRole? userRole, [FromForm] int? managerId , int id)
         {
-            if (userRole == null || managerId == null)
+            if (userRole == null && managerId == null)
             {
                 return BadRequest("null");
             }

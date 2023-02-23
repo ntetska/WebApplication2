@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebApplication2.Persistance;
-using WebApplication2.Services;
 using WebApplication2.Domain;
 using Microsoft.AspNetCore.Identity;
 
@@ -28,7 +27,7 @@ public class AuthController : ControllerBase
 
         var user = await _userRepository.GetByUsernameAsync(username);
         var result = _passwordHasher.VerifyHashedPassword(user, user.Password, password);
-        if(result == PasswordVerificationResult.Failed)
+        if (result == PasswordVerificationResult.Failed)
         {
             return BadRequest("different password");
         }
@@ -59,10 +58,4 @@ public class AuthController : ControllerBase
         await HttpContext.SignOutAsync(
             CookieAuthenticationDefaults.AuthenticationScheme);
     }
-	//[Authorize(Roles = "Admin")]
-	//[HttpGet("Test")]
-	//public string TestingAuth()
-	//{
-	//	return "Success!";
-	//}
 }

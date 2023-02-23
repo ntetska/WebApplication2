@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
-
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication2.Domain
 {
@@ -22,10 +16,11 @@ namespace WebApplication2.Domain
         public string? Email { get; set; }
         public UserRole Role { get; set; } = UserRole.User;
         public User? Manager { get; set; }
-        public IEnumerable<User> ManagedUsers { get; set; } = Enumerable.Empty<User>();
+        public List<User> ManagedUsers { get; set; } = new List<User>();
         public string? ManagerUsername { get; set; }
+        public int VacationDays { get; set; }
         public RegistrationRequest? Request { get; set; }
-        public Vacation? Vacation { get; set; }
+        public List<Vacation> Vacation { get; set; } = new List<Vacation>();
         public bool IsActive { get; set; } = false;
 
         public void ToDTO(UserDTO userDto)

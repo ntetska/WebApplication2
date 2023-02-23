@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace WebApplication2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230222093908_CreateVacation")]
-    partial class CreateVacation
+    [Migration("20230223121716_ChangeManagedUsers")]
+    partial class ChangeManagedUsers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,15 +120,13 @@ namespace WebApplication2.Migrations
                     b.Property<int>("PetitionerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RestOfVacation")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PetitionerId");
+                    b.HasIndex("PetitionerId")
+                        .IsUnique();
 
                     b.ToTable("Vacation");
                 });
@@ -155,8 +153,8 @@ namespace WebApplication2.Migrations
             modelBuilder.Entity("WebApplication2.Domain.Vacation", b =>
                 {
                     b.HasOne("WebApplication2.Domain.User", "Petitioner")
-                        .WithMany()
-                        .HasForeignKey("PetitionerId")
+                        .WithOne("Vacation")
+                        .HasForeignKey("WebApplication2.Domain.Vacation", "PetitionerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -168,6 +166,8 @@ namespace WebApplication2.Migrations
                     b.Navigation("ManagedUsers");
 
                     b.Navigation("Request");
+
+                    b.Navigation("Vacation");
                 });
 #pragma warning restore 612, 618
         }

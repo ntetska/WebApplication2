@@ -34,9 +34,9 @@ namespace WebApplication2.Controllers.Api
         }
         [Authorize(Roles = "Admin")]
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> Update([FromForm] bool? toukan, int id)
+        public async Task<IActionResult> Update([FromForm] bool? status, int id)
         {
-            if (toukan == null)
+            if (status == null)
                 return BadRequest();
             RegistrationRequest request = await _requestRepository.GetByIdAsync(id);
 
@@ -48,7 +48,7 @@ namespace WebApplication2.Controllers.Api
             {
                 return BadRequest("The request is not pending");
             }
-            if (toukan == true)
+            if (status == true)
             {
                 request.Condition = RequestCondition.Accepted;
                 User userToBeActive = await _userRepository.GetByIdAsync(request.ApplicantId);
