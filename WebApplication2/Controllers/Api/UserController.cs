@@ -78,24 +78,23 @@ namespace WebApplication2.Controllers.Api
 
             request.Applicant = user;
             request = await _requestRepository.AddAsync(request);
-            if (ModelState.IsValid)
-            {
-                await _userRepository.AddAsync(user);
+            //if (ModelState.IsValid)
+            //{
+            //await _userRepository.AddAsync(user);
 
-                return RedirectToAction(nameof(Index));
-            }
+            //    return RedirectToAction(nameof(Index));
+            //}
             return Ok(user);
         }
         [Authorize(Roles = "Admin")]
         [HttpPut("AUpdate/{id}")]
         public async Task<IActionResult> Update([FromForm] UserRole? userRole, [FromForm] int? managerId , int id)
         {
-            if(userRole == null || managerId == null)
+            if (userRole == null || managerId == null)
             {
-                return BadRequest();
+                return BadRequest("null");
             }
             User user = await _userRepository.GetByIdAsync(id);
-
             user.Role = userRole.Value;
             User manager = await _userRepository.GetByIdAsync(managerId.Value);
             user.Manager = manager;

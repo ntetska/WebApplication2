@@ -21,16 +21,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Forbidden/";
     });
 
-builder.Services.AddAuthorization(options =>
-{
-	options.AddPolicy("Administrator", policy => policy.RequireRole("Admin"));
-});
+builder.Services.AddAuthorization();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<UserRepository, UserRepository>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IRepository<RegistrationRequest>, RequestRepository>();
+builder.Services.AddScoped<IRepository<Vacation>, VacationRepository>();
 builder.Services.AddScoped<PasswordHasher<User>>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

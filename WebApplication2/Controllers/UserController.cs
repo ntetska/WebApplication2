@@ -69,7 +69,7 @@ namespace WebApplication2.Controllers
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-
+            
             request.Applicant = user;
             request = await _requestRepository.AddAsync(request);
             if (ModelState.IsValid)

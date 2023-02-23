@@ -25,6 +25,7 @@ namespace WebApplication2.Domain
         public IEnumerable<User> ManagedUsers { get; set; } = Enumerable.Empty<User>();
         public string? ManagerUsername { get; set; }
         public RegistrationRequest? Request { get; set; }
+        public Vacation? Vacation { get; set; }
         public bool IsActive { get; set; } = false;
 
         public void ToDTO(UserDTO userDto)

@@ -13,9 +13,9 @@ namespace WebApplication2.Controllers.Api
         private readonly IRepository<RegistrationRequest> _requestRepository;
         private readonly IRepository<User> _userRepository;
 
-        public RequestController(IRepository<RegistrationRequest> requestService, IRepository<User> userRepository)
+        public RequestController(IRepository<RegistrationRequest> requestRepository, IRepository<User> userRepository)
         {
-            _requestRepository = requestService;
+            _requestRepository = requestRepository;
             _userRepository = userRepository;
         }
         [HttpGet("{id}")]
