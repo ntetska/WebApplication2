@@ -5,7 +5,7 @@
 namespace WebApplication2.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateVacation : Migration
+    public partial class DefaultVacationDays : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

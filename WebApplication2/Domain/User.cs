@@ -17,8 +17,8 @@ namespace WebApplication2.Domain
         public UserRole Role { get; set; } = UserRole.User;
         public User? Manager { get; set; }
         public List<User> ManagedUsers { get; set; } = new List<User>();
-        public string? ManagerUsername { get; set; }
-        public int VacationDays { get; set; }
+        //public string ManagerUsername { get; set; }
+        public int VacationDays { get; set; } = 21;
         public RegistrationRequest? Request { get; set; }
         public List<Vacation> Vacation { get; set; } = new List<Vacation>();
         public bool IsActive { get; set; } = false;

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace WebApplication2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230223143144_CreateVacation")]
-    partial class CreateVacation
+    [Migration("20230224080345_manager")]
+    partial class manager
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,9 +73,6 @@ namespace WebApplication2.Migrations
 
                     b.Property<int?>("ManagerId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ManagerUsername")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Number")
                         .IsRequired()

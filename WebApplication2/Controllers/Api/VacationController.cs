@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Common;
 using WebApplication2.Domain;
 using WebApplication2.Services;
+
 
 namespace WebApplication2.Controllers.Api
 {
@@ -12,18 +12,22 @@ namespace WebApplication2.Controllers.Api
     {
         private IRepository<User> _userRepository;
         private IRepository<Vacation> _vacationRepository;
+        private readonly DateTime StartDate;
+        private readonly DateTime EndDate;
 
-        public VacationController(IRepository<Vacation> vacationRepository,IRepository<User> userRepository)
+        public double TotalDays { get; private set; }
+
+        public VacationController(IRepository<Vacation> vacationRepository, IRepository<User> userRepository)
         {
-            _userRepository=userRepository;
+            _userRepository = userRepository;
             _vacationRepository = vacationRepository;
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingle(int id)
         {
             var vacation = await _vacationRepository.GetByIdAsync(id);
-            return Ok(vacation);
 
+            return Ok(vacation);
         }
         [Authorize(Roles = "Manager")]
         [HttpGet("GetAll")]
@@ -34,22 +38,24 @@ namespace WebApplication2.Controllers.Api
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> Create(VacationDto vacation)
+        public async Task<IActionResult> Create(VacationDto vacation, DateTime startDate, DateTime endDate)
         {
+            
             User petitioner = await _userRepository.GetByIdAsync(vacation.PetitionerId);
             Vacation vacationRequest = vacation.ToModel(petitioner);
             vacationRequest = await _vacationRepository.AddAsync(vacationRequest);
-            if (vacationRequest == null)
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
+            //var dates = new List<DateTime>();
+            if (endDate < startDate)
+                throw new ArgumentException("endDate must be greater than or equal to startDate");
+
             return Ok(vacationRequest);
         }
+
+
         [Authorize(Roles = "Manager")]
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> Update([FromForm] bool status, int id)
+        public async Task<IActionResult> Update([FromForm] bool status, [FromForm] bool type, int id)
         {
-            
             Vacation vacation = await _vacationRepository.GetByIdAsync(id);
             if (vacation == null)
             {
@@ -60,18 +66,27 @@ namespace WebApplication2.Controllers.Api
             {
                 return BadRequest("The request is not pending");
             }
-
             if (status)
             {
-                vacation.Status = VacationStatus.Accepted;
-                //int TotalDays = 
-            }
+                DateTime d1 = StartDate;
+                DateTime d2 = EndDate;
 
+                TimeSpan ts = d2-d1;
+                double days = Math.Abs(ts.Days);
+                Vacation vacationDays = vacationDays - days;
+            }
             if (!status)
             {
                 vacation.Status = VacationStatus.Rejected;
             }
-
+            if (type)
+            {
+                vacation.Type = VacationType.MaternityLeave;
+            }
+            if (!type)
+            {
+                vacation.Type = VacationType.UnpaidLeave;
+            }
             vacation = await _vacationRepository.UpdateAsync(vacation);
             return Ok(vacation);
         }

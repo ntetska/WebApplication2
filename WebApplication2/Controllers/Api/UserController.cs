@@ -48,7 +48,6 @@ namespace WebApplication2.Controllers.Api
                 return BadRequest("Password is needed");
             }
 
-            //user.Password = _userRepository.HashPassword(user.Password);
             user.Password = _passwordHasher.HashPassword(user, user.Password);
 
             if (user.Number.IsNullOrEmpty())
@@ -83,15 +82,15 @@ namespace WebApplication2.Controllers.Api
         }
         [Authorize(Roles = "Admin")]
         [HttpPut("AUpdate/{id}")]
-        public async Task<IActionResult> Update([FromForm] UserRole? userRole, [FromForm] int? managerId , int id)
+        public async Task<IActionResult> Update([FromForm] UserRole Role, [FromForm] int managerId , int id)
         {
-            if (userRole == null && managerId == null)
-            {
-                return BadRequest("null");
-            }
+            //if (Role == null && managerId == null)
+            //{
+            //    return BadRequest("null");
+            //}
             User user = await _userRepository.GetByIdAsync(id);
-            user.Role = userRole.Value;
-            User manager = await _userRepository.GetByIdAsync(managerId.Value);
+            user.Role = Role;
+            User manager = await _userRepository.GetByIdAsync(managerId);
             user.Manager = manager;
             await _userRepository.UpdateAsync(user);
             return Ok();
