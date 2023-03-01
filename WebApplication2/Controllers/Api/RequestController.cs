@@ -64,10 +64,12 @@ namespace WebApplication2.Controllers.Api
                 request.Condition = RequestCondition.Rejected;  
             }
 
-            request = await _requestRepository.UpdateAsync(request);
+            List<RegistrationRequest> requests = new List<RegistrationRequest>();
 
+            request = await _requestRepository.UpdateAsync(request);
             if (request.Condition == RequestCondition.Rejected)
             {
+                requests.Add(request);
                 return Ok("the request is rejected!");
             }
            

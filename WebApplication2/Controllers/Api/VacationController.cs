@@ -12,8 +12,6 @@ namespace WebApplication2.Controllers.Api
     {
         private IRepository<User> _userRepository;
         private IRepository<Vacation> _vacationRepository;
-        private readonly DateTime StartDate;
-        private readonly DateTime EndDate;
 
         public double TotalDays { get; private set; }
 
@@ -38,54 +36,115 @@ namespace WebApplication2.Controllers.Api
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> Create(VacationDto vacation, DateTime startDate, DateTime endDate)
+        public async Task<IActionResult> Create(VacationDto vacation)
         {
-            
-            User petitioner = await _userRepository.GetByIdAsync(vacation.PetitionerId);
-            Vacation vacationRequest = vacation.ToModel(petitioner);
-            vacationRequest = await _vacationRepository.AddAsync(vacationRequest);
-            //var dates = new List<DateTime>();
-            if (endDate < startDate)
-                throw new ArgumentException("endDate must be greater than or equal to startDate");
 
+            User petitioner = await _userRepository.GetByIdAsync(vacation.PetitionerId);
+
+            Vacation vacationRequest = vacation.ToModel(petitioner);
+            //check if the user inserted sat or sun date
+            for (DateTime date = vacation.StartDate; date <= vacation.EndDate; date = date.AddDays(1))
+            {
+                if (date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    //to do
+                    throw new ArgumentException("start date or end date is weeknend day");
+                }
+            }
+
+            if (vacation.EndDate < vacation.StartDate)
+                //to do
+                throw new ArgumentException("endDate must be greater than or equal to startDate");
+            vacationRequest = await _vacationRepository.AddAsync(vacationRequest);
             return Ok(vacationRequest);
         }
 
 
         [Authorize(Roles = "Manager")]
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> Update([FromForm] bool status, [FromForm] bool type, int id)
+        public async Task<IActionResult> Update([FromForm] string status,[FromForm] string type, int id)
         {
             Vacation vacation = await _vacationRepository.GetByIdAsync(id);
+
+            VacationStatus statusRes;
+            bool isVacactionStatus = Enum.TryParse(status, true, out statusRes);
+
+            VacationType typeRes;
+            bool isVacactionType = Enum.TryParse(type, true, out typeRes);
+
             if (vacation == null)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
+            //if (vacation.Status != VacationStatus.Pending)
+            //{
+            //    return BadRequest("The request is not pending");
+            //}
+            if (isVacactionStatus && statusRes == VacationStatus.Accepted)
+            {
+                vacation.Status = VacationStatus.Accepted;
+                //to do
+                if (isVacactionType && typeRes == VacationType.Annual)
+                {
+                    vacation.Type = VacationType.Annual;
+                    DateTime d1 = vacation.StartDate;
+                    DateTime d2 = vacation.EndDate;
 
-            if (vacation.Status != VacationStatus.Pending)
-            {
-                return BadRequest("The request is not pending");
-            }
-            if (status)
-            {
-                DateTime d1 = StartDate;
-                DateTime d2 = EndDate;
+                    TimeSpan ts = d2 - d1;
 
-                TimeSpan ts = d2-d1;
-                double days = Math.Abs(ts.Days);
-                Vacation vacationDays = vacationDays - days;
+                    double totalDays = ts.TotalDays;
+
+                    vacation.AnnualLeave = (int)(vacation.AnnualLeave - totalDays);
+                    vacation = await _vacationRepository.UpdateAsync(vacation);
+                }
+
+                if (isVacactionType && typeRes == VacationType.Parental)
+                {
+                    vacation.Type = VacationType.Parental;
+                    DateTime d1 = vacation.StartDate;
+                    DateTime d2 = vacation.EndDate;
+
+                    TimeSpan ts = d2 - d1;
+
+                    double totalDays = ts.TotalDays;
+
+                    vacation.ParentalLeave = (int)(vacation.ParentalLeave - totalDays);
+                    vacation = await _vacationRepository.UpdateAsync(vacation);
+                }
+                if (isVacactionType && typeRes == VacationType.Study)
+                {
+                    vacation.Type = VacationType.Study;
+                    DateTime d1 = vacation.StartDate;
+                    DateTime d2 = vacation.EndDate;
+
+                    TimeSpan ts = d2 - d1;
+
+                    double totalDays = ts.TotalDays;
+
+                    vacation.StudyLeave = (int)(vacation.StudyLeave - totalDays);
+                    vacation = await _vacationRepository.UpdateAsync(vacation);
+
+                }
+                if (isVacactionType && typeRes == VacationType.Sick)
+                {
+                    vacation.Type = VacationType.Sick;
+                    DateTime d1 = vacation.StartDate;
+                    DateTime d2 = vacation.EndDate;
+
+                    TimeSpan ts = d2 - d1;
+
+                    double totalDays = ts.TotalDays;
+
+                    vacation.SickLeave = (int)(vacation.SickLeave - totalDays);
+                    vacation = await _vacationRepository.UpdateAsync(vacation);
+                }
+                vacation = await _vacationRepository.UpdateAsync(vacation);
             }
-            if (!status)
+
+            List<Vacation> vacations = new List<Vacation>();
+            if (isVacactionStatus && statusRes == VacationStatus.Rejected)
             {
-                vacation.Status = VacationStatus.Rejected;
-            }
-            if (type)
-            {
-                vacation.Type = VacationType.MaternityLeave;
-            }
-            if (!type)
-            {
-                vacation.Type = VacationType.UnpaidLeave;
+                vacations.Add(vacation);
             }
             vacation = await _vacationRepository.UpdateAsync(vacation);
             return Ok(vacation);

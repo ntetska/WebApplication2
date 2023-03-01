@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WebApplication2.Domain;
 public class ApplicationDbContext :DbContext
 {
@@ -10,6 +9,7 @@ public class ApplicationDbContext :DbContext
     public DbSet<User> User { get; set; }
     public DbSet<Vacation> Vacation { get; set; }   
     public DbSet<RegistrationRequest> Request { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>().HasMany(v => v.Vacation).WithOne(v => v.Petitioner).IsRequired();

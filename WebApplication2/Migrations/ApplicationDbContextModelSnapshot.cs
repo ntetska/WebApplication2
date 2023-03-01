@@ -108,11 +108,20 @@ namespace WebApplication2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<double>("AnnualLeave")
+                        .HasColumnType("float");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<double>("ParentalLeave")
+                        .HasColumnType("float");
+
                     b.Property<int>("PetitionerId")
                         .HasColumnType("int");
+
+                    b.Property<double>("SickLeave")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -120,14 +129,11 @@ namespace WebApplication2.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<double>("VacationDays")
+                    b.Property<double>("StudyLeave")
                         .HasColumnType("float");
 
-                    b.Property<DateTime>("currentDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

@@ -1,4 +1,6 @@
 ﻿
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication2.Domain {
@@ -9,11 +11,14 @@ namespace WebApplication2.Domain {
         public int Id { get; set; }
         public User Petitioner { get; set; }
         public int PetitionerId { get; set; }
-        public DateTime currentDate { get; set; } = DateTime.Now;
+        //public DateTime currentDate { get; set; } = DateTime.Now;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public double VacationDays { get; set; } = 21;
-        public VacationType Type { get; set; } = VacationType.RegularLeave;
+        public double AnnualLeave { get; set; } = 21;
+        public double ParentalLeave { get; set; } = 2;
+        public double SickLeave { get; set; } = 12;
+        public double StudyLeave { get; set; } = 18;
+        public VacationType Type { get; set; } 
         public VacationStatus Status { get; set; } = VacationStatus.Pending;
     }
     public class VacationDto
@@ -34,16 +39,21 @@ namespace WebApplication2.Domain {
             return vacation;
         }
     }
+
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum VacationStatus
     {
         Pending,
         Accepted,
         Rejected
     }
+
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum VacationType
     {
-        RegularLeave,
-        MaternityLeave,
-        UnpaidLeave
+        Annual,
+        Parental,
+        Sick,
+        Study
     }
 }
