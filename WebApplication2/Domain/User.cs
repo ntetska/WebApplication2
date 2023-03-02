@@ -14,6 +14,7 @@ namespace WebApplication2.Domain
         public string LastName { get; set; }
         public string Number { get; set; }
         public string? Email { get; set; }
+        public DateTime HireDate { get; set; }
         public UserRole Role { get; set; } = UserRole.User;
         public User? Manager { get; set; }
         public List<User> ManagedUsers { get; set; } = new List<User>();

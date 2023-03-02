@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication2.Domain;
 using WebApplication2.Services;
@@ -18,13 +17,21 @@ namespace WebApplication2.Controllers.Api
             _requestRepository = requestRepository;
             _userRepository = userRepository;
         }
+        //watch user's request with httpcontext
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingle(int id)
         {
             var request = await _requestRepository.GetByIdAsync(id);
             return Ok(request);
-
         }
+        //[Authorize(Roles = "Admin")]
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> AGetSingle(int id)
+        //{
+        //    var request = await _requestRepository.GetByIdAsync(id);
+        //    return Ok(request);
+        //}
+
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllAsync()
@@ -32,6 +39,7 @@ namespace WebApplication2.Controllers.Api
             var requests = await _requestRepository.GetAllAsync();
             return Ok(requests);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> Update([FromForm] bool? status, int id)
@@ -64,17 +72,17 @@ namespace WebApplication2.Controllers.Api
                 request.Condition = RequestCondition.Rejected;  
             }
 
-            List<RegistrationRequest> requests = new List<RegistrationRequest>();
-
             request = await _requestRepository.UpdateAsync(request);
+            List<RegistrationRequest> RejectedRequests = new List<RegistrationRequest>();
             if (request.Condition == RequestCondition.Rejected)
             {
-                requests.Add(request);
+                RejectedRequests.Add(request);
                 return Ok("the request is rejected!");
             }
            
             return Ok(request);
         }
+
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using WebApplication2.Domain;
 using WebApplication2.Services;
 
@@ -20,12 +21,22 @@ namespace WebApplication2.Controllers.Api
             _requestRepository = requestRepository;
             _passwordHasher = passwordHasher;
         }
+
+        [HttpGet("GetUser")]
+        public async Task<IActionResult> GetUser()
+        {
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            return Ok(userName);
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingle(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
             return Ok(user);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
@@ -38,7 +49,7 @@ namespace WebApplication2.Controllers.Api
         public async Task<IActionResult> Create(User user)
         {
             RegistrationRequest request = new RegistrationRequest();
-
+            //check the required fields
             if (user.Username == string.Empty)
             {
                 return BadRequest("Username is needed");
@@ -72,22 +83,14 @@ namespace WebApplication2.Controllers.Api
 
             request.Applicant = user;
             request = await _requestRepository.AddAsync(request);
-            //if (ModelState.IsValid)
-            //{
-            //await _userRepository.AddAsync(user);
-
-            //    return RedirectToAction(nameof(Index));
-            //}
             return Ok(user);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPut("AUpdate/{id}")]
         public async Task<IActionResult> Update([FromForm] UserRole Role, [FromForm] int managerId , int id)
         {
-            //if (Role == null && managerId == null)
-            //{
-            //    return BadRequest("null");
-            //}
+            //user gets a manager
             User user = await _userRepository.GetByIdAsync(id);
             user.Role = Role;
             User manager = await _userRepository.GetByIdAsync(managerId);
@@ -95,9 +98,11 @@ namespace WebApplication2.Controllers.Api
             await _userRepository.UpdateAsync(user);
             return Ok();
         }
+
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> Update(UserDTO userDto, int id)
         {
+            //check the required fields
             if (userDto.Username == string.Empty)
             {
                 return BadRequest("Username is needed");
@@ -130,6 +135,8 @@ namespace WebApplication2.Controllers.Api
 
             return Ok(user);
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
 		{

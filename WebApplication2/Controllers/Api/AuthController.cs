@@ -27,23 +27,21 @@ public class AuthController : ControllerBase
 
         var user = await _userRepository.GetByUsernameAsync(username);
         var result = _passwordHasher.VerifyHashedPassword(user, user.Password, password);
+        //check user's password & activity
         if (result == PasswordVerificationResult.Failed)
         {
             return BadRequest("different password");
         }
-
         if (user.IsActive == false)
         {
             return BadRequest("user is not active");
         }
-
         var claims = new List<Claim>
         {
             new Claim("FullName",user.FirstName+" "+user.LastName),
             new Claim(ClaimTypes.Name,user.Username),
             new Claim(ClaimTypes.Role,user.Role.ToString()),
         };
-
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
         await HttpContext.SignInAsync(
@@ -52,6 +50,7 @@ public class AuthController : ControllerBase
 
         return Redirect("/Home");
     }
+
     [HttpGet("Logout")]
     public async Task Logout()
     {

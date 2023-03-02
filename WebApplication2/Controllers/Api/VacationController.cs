@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlTypes;
 using WebApplication2.Domain;
 using WebApplication2.Services;
-
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApplication2.Controllers.Api
 {
@@ -20,6 +21,8 @@ namespace WebApplication2.Controllers.Api
             _userRepository = userRepository;
             _vacationRepository = vacationRepository;
         }
+
+        [Authorize(Roles = "Manager")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingle(int id)
         {
@@ -27,6 +30,7 @@ namespace WebApplication2.Controllers.Api
 
             return Ok(vacation);
         }
+
         [Authorize(Roles = "Manager")]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllAsync()
@@ -40,25 +44,21 @@ namespace WebApplication2.Controllers.Api
         {
 
             User petitioner = await _userRepository.GetByIdAsync(vacation.PetitionerId);
-
             Vacation vacationRequest = vacation.ToModel(petitioner);
-            //check if the user inserted sat or sun date
+            //check if the user insert sat or sun date
             for (DateTime date = vacation.StartDate; date <= vacation.EndDate; date = date.AddDays(1))
             {
                 if (date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday)
                 {
-                    //to do
                     throw new ArgumentException("start date or end date is weeknend day");
                 }
             }
-
+            //check validity of days
             if (vacation.EndDate < vacation.StartDate)
-                //to do
                 throw new ArgumentException("endDate must be greater than or equal to startDate");
             vacationRequest = await _vacationRepository.AddAsync(vacationRequest);
             return Ok(vacationRequest);
         }
-
 
         [Authorize(Roles = "Manager")]
         [HttpPut("Update/{id}")]
@@ -76,14 +76,14 @@ namespace WebApplication2.Controllers.Api
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-            //if (vacation.Status != VacationStatus.Pending)
-            //{
-            //    return BadRequest("The request is not pending");
-            //}
+            if (vacation.Status != VacationStatus.Pending)
+            {
+                return BadRequest("The request is not pending");
+            }
+            //if approved, type gets a value
             if (isVacactionStatus && statusRes == VacationStatus.Accepted)
             {
                 vacation.Status = VacationStatus.Accepted;
-                //to do
                 if (isVacactionType && typeRes == VacationType.Annual)
                 {
                     vacation.Type = VacationType.Annual;
@@ -150,13 +150,16 @@ namespace WebApplication2.Controllers.Api
             return Ok(vacation);
         }
 
+        //user can delete only his vacation
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            List<Vacation> DeletedVacations = new List<Vacation>();
             Vacation vacation = await _vacationRepository.DeleteAsync(id);
+            DeletedVacations.Add(vacation);
             if (vacation == null)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return BadRequest();
             }
             return Ok(vacation);
         }

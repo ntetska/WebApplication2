@@ -1,7 +1,7 @@
-﻿
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
+
 
 namespace WebApplication2.Domain {
 
@@ -11,9 +11,8 @@ namespace WebApplication2.Domain {
         public int Id { get; set; }
         public User Petitioner { get; set; }
         public int PetitionerId { get; set; }
-        //public DateTime currentDate { get; set; } = DateTime.Now;
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime StartDate { get; set; } 
+        public DateTime EndDate { get; set; } 
         public double AnnualLeave { get; set; } = 21;
         public double ParentalLeave { get; set; } = 2;
         public double SickLeave { get; set; } = 12;
