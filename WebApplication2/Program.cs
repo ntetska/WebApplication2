@@ -15,7 +15,7 @@ internal class Program
         builder.Services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 
-        //builder.Services.AddMvc();
+;
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
@@ -52,8 +52,8 @@ internal class Program
         builder.Services.AddScoped<PasswordHasher<User>>();
 
         //http
-        builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        builder.Services.AddHttpContextAccessor();
+        //builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        //builder.Services.AddHttpContextAccessor();
 
         builder.Services.AddSwaggerGen();
 

@@ -22,6 +22,12 @@ namespace WebApplication2.Controllers.Api
             _vacationRepository = vacationRepository;
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetVacation(int id)
+        {
+            var vacation = await _vacationRepository.GetByIdAsync(id);
+            return Ok(vacation);
+        }
         [Authorize(Roles = "Manager")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingle(int id)
@@ -30,7 +36,7 @@ namespace WebApplication2.Controllers.Api
 
             return Ok(vacation);
         }
-
+     
         [Authorize(Roles = "Manager")]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllAsync()

@@ -22,11 +22,16 @@ namespace WebApplication2.Controllers.Api
             _passwordHasher = passwordHasher;
         }
 
-        [HttpGet("GetUser")]
-        public async Task<IActionResult> GetUser()
+        [HttpGet("GetUser/{id}")]
+        public async Task<IActionResult> GetUser(string id)
         {
-            var userName = User.FindFirstValue(ClaimTypes.Name);
-            return Ok(userName);
+            var userCookieID = HttpContext.User.FindFirstValue("Id");
+            if (userCookieID != id)
+            {
+                return BadRequest();
+            }
+            var user = await _userRepository.GetByIdAsync(Int32.Parse(userCookieID));
+            return Ok(user);
         }
 
         [Authorize(Roles = "Admin")]
@@ -102,6 +107,14 @@ namespace WebApplication2.Controllers.Api
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> Update(UserDTO userDto, int id)
         {
+            var userCookieID = HttpContext.User.FindFirstValue("Id");
+            if (userCookieID != id.ToString())
+            {
+                return BadRequest();
+            }
+            //var user = await _userRepository.GetByIdAsync(Int32.Parse(id));
+            User user = await _userRepository.GetByIdAsync(id);
+
             //check the required fields
             if (userDto.Username == string.Empty)
             {
@@ -111,6 +124,8 @@ namespace WebApplication2.Controllers.Api
             {
                 return BadRequest("Password is needed");
             }
+            userDto.Password = _passwordHasher.HashPassword(user, userDto.Password);
+
             if (userDto.Number.IsNullOrEmpty())
             {
                 return BadRequest("Number is needed");
@@ -123,9 +138,8 @@ namespace WebApplication2.Controllers.Api
             {
                 return BadRequest("Email is needed");
             }
-            User user = await _userRepository.GetByIdAsync(id);
             userDto.ToModel(user);
-
+      
             user = await _userRepository.UpdateAsync(user);
 
             if (user == null)
