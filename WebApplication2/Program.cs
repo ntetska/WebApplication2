@@ -45,7 +45,7 @@ internal class Program
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-        builder.Services.AddScoped<UserRepository, UserRepository>();
+        builder.Services.AddScoped<UserRepository>();
         builder.Services.AddScoped<IRepository<User>, UserRepository>();
         builder.Services.AddScoped<IRepository<RegistrationRequest>, RequestRepository>();
         builder.Services.AddScoped<IRepository<Vacation>, VacationRepository>();

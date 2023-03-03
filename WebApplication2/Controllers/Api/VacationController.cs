@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data.SqlTypes;
+using System.Security.Claims;
 using WebApplication2.Domain;
 using WebApplication2.Services;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace WebApplication2.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class VacationController : ControllerBase
     {
         private IRepository<User> _userRepository;
@@ -22,10 +23,17 @@ namespace WebApplication2.Controllers.Api
             _vacationRepository = vacationRepository;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetVacation/{id}")]
         public async Task<IActionResult> GetVacation(int id)
         {
             var vacation = await _vacationRepository.GetByIdAsync(id);
+            var userCookieID = HttpContext.User.FindFirstValue("Id");
+            if (userCookieID != vacation.PetitionerId.ToString())
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, "Unathorized user");
+            }
+            var user = await _userRepository.GetByIdAsync(int.Parse(userCookieID));
+
             return Ok(vacation);
         }
         [Authorize(Roles = "Manager")]
@@ -48,20 +56,24 @@ namespace WebApplication2.Controllers.Api
         [HttpPost("Create")]
         public async Task<IActionResult> Create(VacationDto vacation)
         {
-
-            User petitioner = await _userRepository.GetByIdAsync(vacation.PetitionerId);
+            var userCookieID = HttpContext.User.FindFirstValue("Id");
+            if (userCookieID != vacation.PetitionerId.ToString())
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, "Unathorized user");
+            }
+            User petitioner = await _userRepository.GetByIdAsync(int.Parse(userCookieID));
             Vacation vacationRequest = vacation.ToModel(petitioner);
             //check if the user insert sat or sun date
-            for (DateTime date = vacation.StartDate; date <= vacation.EndDate; date = date.AddDays(1))
+            for (DateOnly date = vacation.StartDate; date <= vacation.EndDate; date = date.AddDays(1))
             {
                 if (date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday)
                 {
-                    throw new ArgumentException("start date or end date is weeknend day");
+                    return BadRequest("start date or end date is weeknend day");
                 }
             }
             //check validity of days
             if (vacation.EndDate < vacation.StartDate)
-                throw new ArgumentException("endDate must be greater than or equal to startDate");
+                return BadRequest("endDate must be greater than or equal to startDate");
             vacationRequest = await _vacationRepository.AddAsync(vacationRequest);
             return Ok(vacationRequest);
         }
@@ -71,12 +83,17 @@ namespace WebApplication2.Controllers.Api
         public async Task<IActionResult> Update([FromForm] string status,[FromForm] string type, int id)
         {
             Vacation vacation = await _vacationRepository.GetByIdAsync(id);
-
             VacationStatus statusRes;
             bool isVacactionStatus = Enum.TryParse(status, true, out statusRes);
 
             VacationType typeRes;
             bool isVacactionType = Enum.TryParse(type, true, out typeRes);
+            var userCookieID = HttpContext.User.FindFirstValue("Id");
+            if (userCookieID != vacation.Petitioner.Manager.Id.ToString())
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, "Unathorized user");
+            }
+            var user = await _userRepository.GetByIdAsync(int.Parse(userCookieID));
 
             if (vacation == null)
             {
@@ -93,55 +110,56 @@ namespace WebApplication2.Controllers.Api
                 if (isVacactionType && typeRes == VacationType.Annual)
                 {
                     vacation.Type = VacationType.Annual;
-                    DateTime d1 = vacation.StartDate;
-                    DateTime d2 = vacation.EndDate;
+
+                    DateTime d1 = vacation.StartDate.Date;
+                    DateTime d2 = vacation.EndDate.Date;
 
                     TimeSpan ts = d2 - d1;
 
-                    double totalDays = ts.TotalDays;
+                    int totalDays = ts.Days;
 
-                    vacation.AnnualLeave = (int)(vacation.AnnualLeave - totalDays);
+                    vacation.AnnualLeave = vacation.AnnualLeave - totalDays;
                     vacation = await _vacationRepository.UpdateAsync(vacation);
                 }
 
                 if (isVacactionType && typeRes == VacationType.Parental)
                 {
                     vacation.Type = VacationType.Parental;
-                    DateTime d1 = vacation.StartDate;
-                    DateTime d2 = vacation.EndDate;
+                    DateTime d1 = vacation.StartDate.Date;
+                    DateTime d2 = vacation.EndDate.Date;
 
                     TimeSpan ts = d2 - d1;
 
-                    double totalDays = ts.TotalDays;
+                    int totalDays = ts.Days;
 
-                    vacation.ParentalLeave = (int)(vacation.ParentalLeave - totalDays);
+                    vacation.ParentalLeave = vacation.ParentalLeave - totalDays;
                     vacation = await _vacationRepository.UpdateAsync(vacation);
                 }
                 if (isVacactionType && typeRes == VacationType.Study)
                 {
                     vacation.Type = VacationType.Study;
-                    DateTime d1 = vacation.StartDate;
-                    DateTime d2 = vacation.EndDate;
+                    DateTime d1 = vacation.StartDate.Date;
+                    DateTime d2 = vacation.EndDate.Date;
 
                     TimeSpan ts = d2 - d1;
 
-                    double totalDays = ts.TotalDays;
+                    int totalDays = ts.Days;
 
-                    vacation.StudyLeave = (int)(vacation.StudyLeave - totalDays);
+                    vacation.StudyLeave = vacation.StudyLeave - totalDays;
                     vacation = await _vacationRepository.UpdateAsync(vacation);
 
                 }
                 if (isVacactionType && typeRes == VacationType.Sick)
                 {
                     vacation.Type = VacationType.Sick;
-                    DateTime d1 = vacation.StartDate;
-                    DateTime d2 = vacation.EndDate;
+                    DateTime d1 = vacation.StartDate.Date;
+                    DateTime d2 = vacation.EndDate.Date;
 
                     TimeSpan ts = d2 - d1;
 
-                    double totalDays = ts.TotalDays;
+                    int totalDays = ts.Days;
 
-                    vacation.SickLeave = (int)(vacation.SickLeave - totalDays);
+                    vacation.SickLeave = vacation.SickLeave - totalDays;
                     vacation = await _vacationRepository.UpdateAsync(vacation);
                 }
                 vacation = await _vacationRepository.UpdateAsync(vacation);
@@ -160,9 +178,15 @@ namespace WebApplication2.Controllers.Api
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            var vacation = await _vacationRepository.GetByIdAsync(id);
+            var userCookieID = HttpContext.User.FindFirstValue("Id");
+            if (userCookieID != vacation.PetitionerId.ToString())
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, "Unathorized user");
+            }
             List<Vacation> DeletedVacations = new List<Vacation>();
-            Vacation vacation = await _vacationRepository.DeleteAsync(id);
-            DeletedVacations.Add(vacation);
+            Vacation delVacation = await _vacationRepository.DeleteAsync(id);
+            DeletedVacations.Add(delVacation);
             if (vacation == null)
             {
                 return BadRequest();

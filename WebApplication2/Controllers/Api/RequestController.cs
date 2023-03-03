@@ -24,13 +24,6 @@ namespace WebApplication2.Controllers.Api
             var request = await _requestRepository.GetByIdAsync(id);
             return Ok(request);
         }
-        //[Authorize(Roles = "Admin")]
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> AGetSingle(int id)
-        //{
-        //    var request = await _requestRepository.GetByIdAsync(id);
-        //    return Ok(request);
-        //}
 
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAll")]
@@ -42,21 +35,18 @@ namespace WebApplication2.Controllers.Api
 
         [Authorize(Roles = "Admin")]
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> Update([FromForm] bool? status, int id)
+        public async Task<IActionResult> Update([FromForm] RequestCondition condition, int id)
         {
-            if (status == null)
-                return BadRequest();
+            //if (condition == null)
+            //    return BadRequest();
             RegistrationRequest request = await _requestRepository.GetByIdAsync(id);
 
             if (request == null)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-            if (request.Condition != RequestCondition.Pending)
-            {
-                return BadRequest("The request is not pending");
-            }
-            if (status == true)
+
+            if (condition == RequestCondition.Accepted)
             {
                 request.Condition = RequestCondition.Accepted;
                 User userToBeActive = await _userRepository.GetByIdAsync(request.ApplicantId);
@@ -69,7 +59,7 @@ namespace WebApplication2.Controllers.Api
             }
             else
             {
-                request.Condition = RequestCondition.Rejected;  
+                request.Condition = RequestCondition.Rejected;
             }
 
             request = await _requestRepository.UpdateAsync(request);

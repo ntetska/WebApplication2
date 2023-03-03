@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Net;
 using System.Security.Claims;
 using WebApplication2.Domain;
 using WebApplication2.Services;
@@ -10,6 +11,7 @@ namespace WebApplication2.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IRepository<User> _userRepository;
@@ -28,7 +30,7 @@ namespace WebApplication2.Controllers.Api
             var userCookieID = HttpContext.User.FindFirstValue("Id");
             if (userCookieID != id)
             {
-                return BadRequest();
+                return StatusCode(StatusCodes.Status401Unauthorized, "Unathorized user");
             }
             var user = await _userRepository.GetByIdAsync(Int32.Parse(userCookieID));
             return Ok(user);
@@ -110,7 +112,7 @@ namespace WebApplication2.Controllers.Api
             var userCookieID = HttpContext.User.FindFirstValue("Id");
             if (userCookieID != id.ToString())
             {
-                return BadRequest();
+                return StatusCode(StatusCodes.Status401Unauthorized, "Unathorized user");
             }
             //var user = await _userRepository.GetByIdAsync(Int32.Parse(id));
             User user = await _userRepository.GetByIdAsync(id);

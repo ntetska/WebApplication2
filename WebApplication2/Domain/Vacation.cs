@@ -23,17 +23,16 @@ namespace WebApplication2.Domain {
     public class VacationDto
     {
         public int PetitionerId { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
         public Vacation ToModel(User user)
         {
-
             Vacation vacation = new Vacation()
             {
                 Petitioner = user,
                 PetitionerId = PetitionerId,
-                StartDate = StartDate,
-                EndDate = EndDate
+                StartDate = StartDate.ToDateTime(new TimeOnly(0,0)),
+                EndDate = EndDate.ToDateTime(new TimeOnly(0,0)),
             };
             return vacation;
         }

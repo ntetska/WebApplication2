@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 namespace WebApplication2.Controllers.Api;
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class AuthController : ControllerBase
 {
     private readonly UserRepository _userRepository;
