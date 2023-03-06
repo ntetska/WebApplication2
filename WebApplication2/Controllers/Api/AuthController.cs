@@ -31,11 +31,11 @@ public class AuthController : ControllerBase
         //check user's password & activity
         if (result == PasswordVerificationResult.Failed)
         {
-            return BadRequest("different password");
+            return Unauthorized("Unathorized user");
         }
         if (user.IsActive == false)
         {
-            return BadRequest("user is not active");
+            return Unauthorized("Unathorized user");
         }
         var claims = new List<Claim>
         {
@@ -49,8 +49,7 @@ public class AuthController : ControllerBase
         await HttpContext.SignInAsync(
             CookieAuthenticationDefaults.AuthenticationScheme,
             new ClaimsPrincipal(claimsIdentity));
-
-        return Redirect("/Home");
+        return Ok();
     }
 
     [HttpGet("Logout")]

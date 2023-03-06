@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Concurrent;
 using System.Security.Claims;
 using WebApplication2.Domain;
+using WebApplication2.Migrations;
 using WebApplication2.Services;
 
 
@@ -57,11 +59,11 @@ namespace WebApplication2.Controllers.Api
         public async Task<IActionResult> Create(VacationDto vacation)
         {
             var userCookieID = HttpContext.User.FindFirstValue("Id");
+            User petitioner = await _userRepository.GetByIdAsync(int.Parse(userCookieID));
             if (userCookieID != vacation.PetitionerId.ToString())
             {
-                return StatusCode(StatusCodes.Status401Unauthorized, "Unathorized user");
+                return Forbid("Forbidden");
             }
-            User petitioner = await _userRepository.GetByIdAsync(int.Parse(userCookieID));
             Vacation vacationRequest = vacation.ToModel(petitioner);
             //check if the user insert sat or sun date
             for (DateOnly date = vacation.StartDate; date <= vacation.EndDate; date = date.AddDays(1))
@@ -73,7 +75,13 @@ namespace WebApplication2.Controllers.Api
             }
             //check validity of days
             if (vacation.EndDate < vacation.StartDate)
+            {
                 return BadRequest("endDate must be greater than or equal to startDate");
+            }
+            if (petitioner.Role == UserRole.Manager)
+            {
+                vacationRequest.Status = VacationStatus.Accepted;
+            }
             vacationRequest = await _vacationRepository.AddAsync(vacationRequest);
             return Ok(vacationRequest);
         }
@@ -91,7 +99,7 @@ namespace WebApplication2.Controllers.Api
             var userCookieID = HttpContext.User.FindFirstValue("Id");
             if (userCookieID != vacation.Petitioner.Manager.Id.ToString())
             {
-                return StatusCode(StatusCodes.Status401Unauthorized, "Unathorized user");
+                return StatusCode(StatusCodes.Status403Forbidden, "Forbidden");
             }
             var user = await _userRepository.GetByIdAsync(int.Parse(userCookieID));
 

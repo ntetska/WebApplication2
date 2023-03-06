@@ -4,6 +4,7 @@ using WebApplication2.Persistance;
 using WebApplication2.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using System.Globalization;
 
 internal class Program
 {
@@ -25,22 +26,21 @@ internal class Program
             });
 
         //add localization
-        //builder.Services.AddLocalization(options =>
-        //{
-        //    options.ResourcesPath = "Resources";
-        //});
-        //builder.Services.Configure<RequestLocalizationOptions>(options =>
-        //{
-        //    options.SetDefaultCulture("en-Us");
-        //    options.AddSupportedUICultures("en-US", "de-DE", "ja-JP");
-        //    options.FallBackToParentUICultures = true;
+        //builder.Services.AddLocalization();
 
-        //    options
-        //        .RequestCultureProviders
-        //        .Remove(typeof(AcceptLanguageHeaderRequestCultureProvider));
-        //});
+        //var localizationOptions = new RequestLocalizationOptions();
 
-        //
+        //var supportedCultures = new[]
+        //{
+        //    new CultureInfo ("en-US"),
+        //    new CultureInfo ("gr-GR")
+        //};
+
+        //localizationOptions.SupportedUICultures = supportedCultures;
+        //localizationOptions.SupportedUICultures = supportedCultures;
+        //localizationOptions.SetDefaultCulture("en-US");
+        //localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
+
         builder.Services.AddAuthorization();
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -59,10 +59,12 @@ internal class Program
 
         var app = builder.Build();
 
+        //app.UseRequestLocalization(localizationOptions);    
+
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
-            app.UseExceptionHandler("/Home/Error");
+            //app.UseExceptionHandler("/Home/Error");
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
