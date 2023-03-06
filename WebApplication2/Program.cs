@@ -4,7 +4,6 @@ using WebApplication2.Persistance;
 using WebApplication2.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using System.Globalization;
 
 internal class Program
 {
@@ -16,14 +15,21 @@ internal class Program
         builder.Services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 
-;
-        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options =>
-            {
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
-                options.SlidingExpiration = true;
-                options.AccessDeniedPath = "/Forbidden/";
-            });
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        })
+        .AddCookie(options =>
+        {
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+            options.SlidingExpiration = true;
+            //options.AccessDeniedPath = "/api/Auth/AccessDenied";
+            options.LogoutPath = "/api/Auth/Logout";
+            options.LoginPath = "/api/Auth/Login";
+            
+        });
 
         //add localization
         //builder.Services.AddLocalization();

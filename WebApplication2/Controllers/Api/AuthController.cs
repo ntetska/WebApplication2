@@ -6,6 +6,7 @@ using System.Security.Claims;
 using WebApplication2.Persistance;
 using WebApplication2.Domain;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace WebApplication2.Controllers.Api;
 [Route("api/[controller]")]
@@ -53,9 +54,17 @@ public class AuthController : ControllerBase
     }
 
     [HttpGet("Logout")]
-    public async Task Logout()
+    public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(
             CookieAuthenticationDefaults.AuthenticationScheme);
+
+        return Ok();
+    }
+
+    [HttpGet("AccessDenied")]
+    public IActionResult AccessDenied()
+    {
+        return Forbid("Access Denied");
     }
 }

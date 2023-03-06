@@ -1,17 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Concurrent;
 using System.Security.Claims;
 using WebApplication2.Domain;
-using WebApplication2.Migrations;
 using WebApplication2.Services;
 
 
 namespace WebApplication2.Controllers.Api
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class VacationController : ControllerBase
     {
         private IRepository<User> _userRepository;
@@ -24,7 +23,6 @@ namespace WebApplication2.Controllers.Api
             _userRepository = userRepository;
             _vacationRepository = vacationRepository;
         }
-
         [HttpGet("GetVacation/{id}")]
         public async Task<IActionResult> GetVacation(int id)
         {
@@ -34,8 +32,6 @@ namespace WebApplication2.Controllers.Api
             {
                 return StatusCode(StatusCodes.Status401Unauthorized, "Unathorized user");
             }
-            var user = await _userRepository.GetByIdAsync(int.Parse(userCookieID));
-
             return Ok(vacation);
         }
         [Authorize(Roles = "Manager")]
@@ -54,7 +50,6 @@ namespace WebApplication2.Controllers.Api
             var vacation = await _vacationRepository.GetAllAsync();
             return Ok(vacation);
         }
-
         [HttpPost("Create")]
         public async Task<IActionResult> Create(VacationDto vacation)
         {

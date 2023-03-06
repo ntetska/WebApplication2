@@ -11,8 +11,6 @@ namespace WebApplication2.Persistance
     public class VacationRepository : IRepository<Vacation>
     {
         private readonly ApplicationDbContext _context;
-        private readonly DateTime StartDate;
-        private readonly DateTime EndDate;
 
         public VacationRepository(ApplicationDbContext context)
         {

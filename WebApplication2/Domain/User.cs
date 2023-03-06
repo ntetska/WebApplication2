@@ -35,6 +35,8 @@ namespace WebApplication2.Domain
         }
     }
 
+
+
     public class UserDTO
     {
         public string Username { get; set; }

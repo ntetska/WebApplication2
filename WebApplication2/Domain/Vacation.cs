@@ -20,6 +20,9 @@ namespace WebApplication2.Domain {
         public VacationType Type { get; set; } 
         public VacationStatus Status { get; set; } = VacationStatus.Pending;
     }
+
+
+
     public class VacationDto
     {
         public int PetitionerId { get; set; }
