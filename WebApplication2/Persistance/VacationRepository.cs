@@ -36,7 +36,7 @@ namespace WebApplication2.Persistance
         }
         public async Task<Vacation> GetByIdAsync(int id)
         {
-            var result = await _context.Vacation.Where(v => v.Id == id).Include(x => x.Petitioner).ThenInclude(x => x.Manager).FirstOrDefaultAsync();
+            var result = await _context.Vacation.Where(v => v.Id == id).Include(x => x.Petitioner).ThenInclude(x => x.managerId).FirstOrDefaultAsync();
             return result;
         }
         public async Task<Vacation> UpdateAsync(Vacation vacation)

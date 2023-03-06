@@ -16,7 +16,7 @@ namespace WebApplication2.Domain
         public string? Email { get; set; }
         public DateTime HireDate { get; set; }
         public UserRole Role { get; set; } = UserRole.User;
-        public User? Manager { get; set; }
+        public User? managerId { get; set; }
         public List<User> ManagedUsers { get; set; } = new List<User>();
         //public string ManagerUsername { get; set; }
         public int VacationDays { get; set; } = 21;
@@ -33,9 +33,25 @@ namespace WebApplication2.Domain
             userDto.Number = Number;
             userDto.Email = Email;
         }
+
+        public void ToDto(UserDisplay userDisplay)
+        {
+            userDisplay.Username = Username;
+            userDisplay.Number = Number;
+        }
     }
 
+    public class UserDisplay
+    {
+        public string Username { get; set; }
+        public string Number { get; set; }
 
+        public void ToModel(User user)
+        {
+            user.Username = Username;
+            user.Number = Number;
+        }
+    }
 
     public class UserDTO
     {

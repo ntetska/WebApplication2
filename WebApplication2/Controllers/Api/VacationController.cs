@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebApplication2.Domain;
+using WebApplication2.Migrations;
 using WebApplication2.Services;
 
 
@@ -92,7 +92,7 @@ namespace WebApplication2.Controllers.Api
             VacationType typeRes;
             bool isVacactionType = Enum.TryParse(type, true, out typeRes);
             var userCookieID = HttpContext.User.FindFirstValue("Id");
-            if (userCookieID != vacation.Petitioner.Manager.Id.ToString())
+            if (userCookieID != vacation.Petitioner.managerId.Id.ToString())
             {
                 return StatusCode(StatusCodes.Status403Forbidden, "Forbidden");
             }

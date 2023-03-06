@@ -6,7 +6,6 @@ using System.Security.Claims;
 using WebApplication2.Persistance;
 using WebApplication2.Domain;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace WebApplication2.Controllers.Api;
 [Route("api/[controller]")]
