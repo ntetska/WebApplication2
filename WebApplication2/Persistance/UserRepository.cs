@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using WebApplication2.Domain;
 using WebApplication2.Services;
 
@@ -35,7 +36,7 @@ namespace WebApplication2.Persistance
         }
         public async Task<User> GetByIdAsync(int id)
         {
-            var result = await _context.User.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var result = await _context.User.Where(e => e.Id == id).Include(m => m.Manager).FirstOrDefaultAsync();
             return result;
         }
         public async Task<User> GetByUsernameAsync(string username)
