@@ -33,6 +33,15 @@ namespace WebApplication2.Controllers.Api
             }
             return Ok(vacation);
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            var vacations = await _vacationRepository.GetAllAsync();
+            return Ok(vacations);
+        }
+
         [Authorize(Roles = "Manager")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingle(int id)
@@ -42,7 +51,7 @@ namespace WebApplication2.Controllers.Api
         }
 
         [Authorize(Roles = "Manager")]
-        [HttpGet("GetAll")]
+        [HttpGet("ManagedVac")]
         public async Task<IActionResult> GetAllAsync()
         {
             List<Vacation> ManagedVac = new List<Vacation>();

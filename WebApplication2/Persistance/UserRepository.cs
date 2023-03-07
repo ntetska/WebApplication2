@@ -29,7 +29,7 @@ namespace WebApplication2.Persistance
             }
         }
         public async Task<List<User>> GetAllAsync()
-        {
+        { 
             var result = await _context.User.ToListAsync();
             return result;
         }
@@ -55,7 +55,6 @@ namespace WebApplication2.Persistance
             {
                 return null;
             }
-
         }
         public async Task<User> DeleteAsync(int id)
         {

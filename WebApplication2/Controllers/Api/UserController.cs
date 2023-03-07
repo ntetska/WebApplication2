@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using WebApplication2.Domain;
-using WebApplication2.Migrations;
-using WebApplication2.Persistance;
 using WebApplication2.Services;
 
 namespace WebApplication2.Controllers.Api
@@ -48,6 +45,26 @@ namespace WebApplication2.Controllers.Api
         {
             var users = await _userRepository.GetAllAsync();
             return Ok(users);
+        }
+
+        [Authorize(Roles = "Manager")]
+        [HttpGet("GetManagedUsers")]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            List<User> ManagedUsers = new List<User>();
+
+            var userCookieID = HttpContext.User.FindFirstValue("Id");
+
+            List<User> users = await _userRepository.GetAllAsync();
+
+            foreach (var user in users)
+            {
+                if (user.Manager != null && (user.Manager.Id == (int.Parse(userCookieID))))
+                {
+                    ManagedUsers.Add(user);
+                }
+            }
+            return Ok(ManagedUsers);
         }
 
         [HttpPost("Create")]

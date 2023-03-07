@@ -33,24 +33,6 @@ namespace WebApplication2.Domain
             userDto.Number = Number;
             userDto.Email = Email;
         }
-
-        public void ToDto(UserDisplay userDisplay)
-        {
-            userDisplay.Username = Username;
-            userDisplay.Number = Number;
-        }
-    }
-
-    public class UserDisplay
-    {
-        public string Username { get; set; }
-        public string Number { get; set; }
-
-        public void ToModel(User user)
-        {
-            user.Username = Username;
-            user.Number = Number;
-        }
     }
 
     public class UserDTO

@@ -27,6 +27,10 @@ public class AuthController : ControllerBase
     {
 
         var user = await _userRepository.GetByUsernameAsync(username);
+        if (user == null)
+        {
+            return Unauthorized("The data does not correspond to a user!");
+        }
         var result = _passwordHasher.VerifyHashedPassword(user, user.Password, password);
         //check user's password & activity
         if (result == PasswordVerificationResult.Failed)
