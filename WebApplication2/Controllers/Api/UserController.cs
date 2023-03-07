@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using WebApplication2.Domain;
 using WebApplication2.Migrations;
+using WebApplication2.Persistance;
 using WebApplication2.Services;
 
 namespace WebApplication2.Controllers.Api
@@ -98,7 +99,7 @@ namespace WebApplication2.Controllers.Api
             User user = await _userRepository.GetByIdAsync(id);
             user.Role = Role;
             User manager = await _userRepository.GetByIdAsync(managerId);
-            user.managerId = manager;
+            user.Manager = manager;
             await _userRepository.UpdateAsync(user);
             return Ok();
         }

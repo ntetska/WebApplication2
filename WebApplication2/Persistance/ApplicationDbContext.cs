@@ -13,7 +13,7 @@ public class ApplicationDbContext :DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>().HasMany(v => v.Vacation).WithOne(v => v.Petitioner).IsRequired();
-        modelBuilder.Entity<User>().HasOne(a => a.managerId).WithMany(a => a.ManagedUsers).IsRequired(false);
+        modelBuilder.Entity<User>().HasOne(a => a.Manager).WithMany(a => a.ManagedUsers).IsRequired(false);
         modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
         modelBuilder.Entity<User>().Property(u => u.Username).HasColumnType("nvarchar(255)");
         modelBuilder.Entity<User>().HasOne(a => a.Request).WithOne(a => a.Applicant).IsRequired(false).OnDelete(DeleteBehavior.Cascade);

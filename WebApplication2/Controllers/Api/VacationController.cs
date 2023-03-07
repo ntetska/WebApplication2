@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebApplication2.Domain;
-using WebApplication2.Migrations;
 using WebApplication2.Services;
 
 
@@ -39,17 +38,29 @@ namespace WebApplication2.Controllers.Api
         public async Task<IActionResult> GetSingle(int id)
         {
             var vacation = await _vacationRepository.GetByIdAsync(id);
-
             return Ok(vacation);
         }
-     
+
         [Authorize(Roles = "Manager")]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllAsync()
         {
-            var vacation = await _vacationRepository.GetAllAsync();
-            return Ok(vacation);
+            List<Vacation> ManagedVac = new List<Vacation>();
+
+            var userCookieID = HttpContext.User.FindFirstValue("Id");
+
+            List<Vacation> vacations = await _vacationRepository.GetAllAsync();
+
+            foreach (var vacation in vacations)
+            {
+                if (vacation.Petitioner.Manager != null && (vacation.Petitioner.Manager.Id == (int.Parse(userCookieID))))
+                {
+                    ManagedVac.Add(vacation);
+                }
+            }
+            return Ok(ManagedVac);
         }
+
         [HttpPost("Create")]
         public async Task<IActionResult> Create(VacationDto vacation)
         {
@@ -92,7 +103,7 @@ namespace WebApplication2.Controllers.Api
             VacationType typeRes;
             bool isVacactionType = Enum.TryParse(type, true, out typeRes);
             var userCookieID = HttpContext.User.FindFirstValue("Id");
-            if (userCookieID != vacation.Petitioner.managerId.Id.ToString())
+            if (vacation.Petitioner.Manager != null && (userCookieID != vacation.Petitioner.Manager.Id.ToString()))
             {
                 return StatusCode(StatusCodes.Status403Forbidden, "Forbidden");
             }

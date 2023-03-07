@@ -16,7 +16,7 @@ namespace WebApplication2.Domain
         public string? Email { get; set; }
         public DateTime HireDate { get; set; }
         public UserRole Role { get; set; } = UserRole.User;
-        public User? managerId { get; set; }
+        public User? Manager { get; set; }
         public List<User> ManagedUsers { get; set; } = new List<User>();
         //public string ManagerUsername { get; set; }
         public int VacationDays { get; set; } = 21;
