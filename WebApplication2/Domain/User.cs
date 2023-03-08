@@ -33,8 +33,23 @@ namespace WebApplication2.Domain
             userDto.Number = Number;
             userDto.Email = Email;
         }
+        public void ToDDD(UserDDD userDDD)
+        {
+            userDDD.Username = Username;
+            userDDD.Number = Number;
+        }
     }
 
+    public class UserDDD
+    {
+        public string Username { get; set; }
+        public string Number { get; set; }
+        public void ToModel(User user)
+        {
+            user.Username = Username;
+            user.Number = Number;
+        }
+    }
     public class UserDTO
     {
         public string Username { get; set; }

@@ -35,10 +35,11 @@ namespace WebApplication2.Persistance
                 .ToListAsync();
             return result;
         }
+        //TO DO
         public async Task<User> GetByIdAsync(int id)
         {
-            var result = await _context.User.Where(e => e.Id == id).Include(m => m.Manager).FirstOrDefaultAsync();
-            return result;
+            var user = await _context.User.Where(e => e.Id == id).Include(m => m.Manager).FirstOrDefaultAsync();
+            return user;
         }
         public async Task<User> GetByUsernameAsync(string username)
         {

@@ -4,6 +4,7 @@ using WebApplication2.Persistance;
 using WebApplication2.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using System.Globalization;
 
 internal class Program
 {
@@ -32,20 +33,20 @@ internal class Program
         });
 
         //add localization
-        //builder.Services.AddLocalization();
+        builder.Services.AddLocalization();
 
-        //var localizationOptions = new RequestLocalizationOptions();
+        var localizationOptions = new RequestLocalizationOptions();
 
-        //var supportedCultures = new[]
-        //{
-        //    new CultureInfo ("en-US"),
-        //    new CultureInfo ("gr-GR")
-        //};
+        var supportedCultures = new[]
+        {
+            new CultureInfo ("en-US"),
+            new CultureInfo ("gr-GR")
+        };
 
-        //localizationOptions.SupportedUICultures = supportedCultures;
-        //localizationOptions.SupportedUICultures = supportedCultures;
-        //localizationOptions.SetDefaultCulture("en-US");
-        //localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
+        localizationOptions.SupportedUICultures = supportedCultures;
+        localizationOptions.SupportedUICultures = supportedCultures;
+        localizationOptions.SetDefaultCulture("en-US");
+        localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
 
         builder.Services.AddAuthorization();
 
@@ -65,7 +66,7 @@ internal class Program
 
         var app = builder.Build();
 
-        //app.UseRequestLocalization(localizationOptions);    
+        app.UseRequestLocalization(localizationOptions);    
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())

@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
-using System.Data;
 using System.Security.Claims;
 using WebApplication2.Domain;
+using WebApplication2.Resources;
 using WebApplication2.Services;
 
 namespace WebApplication2.Controllers.Api
@@ -17,11 +18,13 @@ namespace WebApplication2.Controllers.Api
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<RegistrationRequest> _requestRepository;
         private readonly PasswordHasher<User> _passwordHasher;
-        public UserController(IRepository<User> userRepository, IRepository<RegistrationRequest> requestRepository, PasswordHasher<User> passwordHasher)
+        private readonly IStringLocalizer<SharedResource> _sharedResourceLocalizer;
+        public UserController(IRepository<User> userRepository, IRepository<RegistrationRequest> requestRepository, PasswordHasher<User> passwordHasher, IStringLocalizer<SharedResource> sharedResourceLocalizer)
         {
             _userRepository = userRepository;
             _requestRepository = requestRepository;
             _passwordHasher = passwordHasher;
+            _sharedResourceLocalizer= sharedResourceLocalizer;
         }
 
         [HttpGet("GetUser")]
@@ -75,14 +78,14 @@ namespace WebApplication2.Controllers.Api
             //check the required fields
             if (user.Username == string.Empty)
             {
-                return BadRequest("Username is needed");
+                return Ok("Username is needed");
             }
             if (user.Password == string.Empty)
             {
                 return BadRequest("Password is needed");
             }
 
-            user.Password = _passwordHasher.HashPassword(user, user.Password);
+            user.Password = _passwordHasher.HashPassword(user,user.Password);
 
             if (user.Number.IsNullOrEmpty())
             {
