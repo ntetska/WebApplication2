@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System.Security.Claims;
 using WebApplication2.Domain;
-using WebApplication2.Resources;
 using WebApplication2.Services;
 
 
@@ -16,10 +15,10 @@ namespace WebApplication2.Controllers.Api
     {
         private IRepository<User> _userRepository;
         private IRepository<Vacation> _vacationRepository;
-        private readonly IStringLocalizer<SharedResource> _sharedResourceLocalizer;
+        private readonly IStringLocalizer<VacationController> _sharedResourceLocalizer;
         public double TotalDays { get; private set; }
 
-        public VacationController(IRepository<Vacation> vacationRepository, IRepository<User> userRepository,IStringLocalizer<SharedResource> stringLocalizer)
+        public VacationController(IRepository<Vacation> vacationRepository, IRepository<User> userRepository,IStringLocalizer<VacationController> stringLocalizer)
         {
             _userRepository = userRepository;
             _vacationRepository = vacationRepository;

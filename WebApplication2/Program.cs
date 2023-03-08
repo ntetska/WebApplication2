@@ -5,6 +5,10 @@ using WebApplication2.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using System.Globalization;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Builder;
 
 internal class Program
 {
@@ -33,20 +37,27 @@ internal class Program
         });
 
         //add localization
-        builder.Services.AddLocalization();
+        
 
-        var localizationOptions = new RequestLocalizationOptions();
+      
+        
+        builder.Services.AddLocalization(opt=>opt.ResourcesPath = "Resources");
+        builder.Services.Configure<RequestLocalizationOptions>(opt =>{
+            var supportedCultures = new[]
+            {
+                new CultureInfo ("en-US"),
+                new CultureInfo ("gr-GR")
+            };
 
-        var supportedCultures = new[]
-        {
-            new CultureInfo ("en-US"),
-            new CultureInfo ("gr-GR")
-        };
+            opt.SupportedUICultures = supportedCultures;
+            opt.SupportedUICultures = supportedCultures;
+            opt.SetDefaultCulture("en-US");
+            opt.ApplyCurrentCultureToResponseHeaders = true;
+            //opt.RequestCultureProviders = new List<RequestCultureProvider>() {
+             
+            //};
 
-        localizationOptions.SupportedUICultures = supportedCultures;
-        localizationOptions.SupportedUICultures = supportedCultures;
-        localizationOptions.SetDefaultCulture("en-US");
-        localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
+        });
 
         builder.Services.AddAuthorization();
 
@@ -66,7 +77,9 @@ internal class Program
 
         var app = builder.Build();
 
-        app.UseRequestLocalization(localizationOptions);    
+
+       var opts= app.Services.GetService<IOptions<RequestLocalizationOptions>>().Value;
+        app.UseRequestLocalization(opts);    
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())

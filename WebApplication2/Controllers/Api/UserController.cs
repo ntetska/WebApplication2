@@ -5,7 +5,6 @@ using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using WebApplication2.Domain;
-using WebApplication2.Resources;
 using WebApplication2.Services;
 
 namespace WebApplication2.Controllers.Api
@@ -18,8 +17,8 @@ namespace WebApplication2.Controllers.Api
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<RegistrationRequest> _requestRepository;
         private readonly PasswordHasher<User> _passwordHasher;
-        private readonly IStringLocalizer<SharedResource> _sharedResourceLocalizer;
-        public UserController(IRepository<User> userRepository, IRepository<RegistrationRequest> requestRepository, PasswordHasher<User> passwordHasher, IStringLocalizer<SharedResource> sharedResourceLocalizer)
+        private readonly IStringLocalizer<UserController> _sharedResourceLocalizer;
+        public UserController(IRepository<User> userRepository, IRepository<RegistrationRequest> requestRepository, PasswordHasher<User> passwordHasher, IStringLocalizer<UserController> sharedResourceLocalizer)
         {
             _userRepository = userRepository;
             _requestRepository = requestRepository;
@@ -70,19 +69,21 @@ namespace WebApplication2.Controllers.Api
             }
             return Ok(ManagedUsers);
         }
-
+        [AllowAnonymous]
         [HttpPost("Create")]
         public async Task<IActionResult> Create([FromForm] User user)
         {
+            
+
             RegistrationRequest request = new RegistrationRequest();
             //check the required fields
             if (user.Username == string.Empty)
             {
-                return Ok("Username is needed");
+                return BadRequest(_sharedResourceLocalizer["USERNAME"].Value);
             }
             if (user.Password == string.Empty)
             {
-                return BadRequest("Password is needed");
+                return BadRequest(_sharedResourceLocalizer["USERNAME"]);
             }
 
             user.Password = _passwordHasher.HashPassword(user,user.Password);
