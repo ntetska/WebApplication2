@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WebApplication2.Domain;
 using WebApplication2.Services;
 
@@ -31,7 +30,9 @@ namespace WebApplication2.Persistance
         }
         public async Task<List<User>> GetAllAsync()
         { 
-            var result = await _context.User.ToListAsync();
+            var result = await _context.User
+                .Include(s=>s.Vacation)
+                .ToListAsync();
             return result;
         }
         public async Task<User> GetByIdAsync(int id)

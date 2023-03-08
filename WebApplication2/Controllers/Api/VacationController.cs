@@ -78,9 +78,9 @@ namespace WebApplication2.Controllers.Api
         {
             var userCookieID = HttpContext.User.FindFirstValue("Id");
             var users = await _userRepository.GetAllAsync();
-            var query = from user in users
-                        where user.Manager != null && user.Manager.Id == int.Parse(userCookieID)
-                        select user;
+            IEnumerable<Vacation> query = users
+                                        .Where(u => u.Manager != null && u.Manager.Id == Convert.ToInt32(userCookieID))
+                                                .SelectMany(s=>s.Vacation);
             return Ok(query);
         }
 
