@@ -9,7 +9,7 @@ namespace WebApplication2.Domain {
     {
         [Key]
         public int Id { get; set; }
-        public User Petitioner { get; set; }
+        public virtual User Petitioner { get; set; }
         public int PetitionerId { get; set; }
         public DateTime StartDate { get; set; } 
         public DateTime EndDate { get; set; } 

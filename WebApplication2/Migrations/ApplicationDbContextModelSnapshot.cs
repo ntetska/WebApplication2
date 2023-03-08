@@ -43,7 +43,7 @@ namespace WebApplication2.Migrations
                     b.HasIndex("ApplicantId")
                         .IsUnique();
 
-                    b.ToTable("Request");
+                    b.ToTable("Request", (string)null);
                 });
 
             modelBuilder.Entity("WebApplication2.Domain.User", b =>
@@ -100,7 +100,7 @@ namespace WebApplication2.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("WebApplication2.Domain.Vacation", b =>
@@ -142,7 +142,7 @@ namespace WebApplication2.Migrations
 
                     b.HasIndex("PetitionerId");
 
-                    b.ToTable("Vacation");
+                    b.ToTable("Vacation", (string)null);
                 });
 
             modelBuilder.Entity("WebApplication2.Domain.RegistrationRequest", b =>

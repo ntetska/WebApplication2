@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Castle.Core.Resource;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebApplication2.Domain;
+using WebApplication2.Migrations;
 using WebApplication2.Services;
 
 
@@ -50,25 +52,38 @@ namespace WebApplication2.Controllers.Api
             return Ok(vacation);
         }
 
+        //[Authorize(Roles = "Manager")]
+        //[HttpGet("ManagedVac")]
+        //public async Task<IActionResult> GetAllAsync()
+        //{
+        //    List<Vacation> ManagedVac = new List<Vacation>();
+
+        //    var userCookieID = HttpContext.User.FindFirstValue("Id");
+
+        //    List<Vacation> vacations = await _vacationRepository.GetAllAsync();
+        //    //ελεγχος σε users οχι σε vac
+        //    foreach (var vacation in vacations)
+        //    {
+        //        if (vacation.Petitioner.Manager != null && (vacation.Petitioner.Manager.Id == (int.Parse(userCookieID))))
+        //        {
+        //            ManagedVac.Add(vacation);
+        //        }
+        //    }
+        //    return Ok(ManagedVac);
+        //}
+
         [Authorize(Roles = "Manager")]
         [HttpGet("ManagedVac")]
         public async Task<IActionResult> GetAllAsync()
         {
-            List<Vacation> ManagedVac = new List<Vacation>();
-
             var userCookieID = HttpContext.User.FindFirstValue("Id");
-
-            List<Vacation> vacations = await _vacationRepository.GetAllAsync();
-
-            foreach (var vacation in vacations)
-            {
-                if (vacation.Petitioner.Manager != null && (vacation.Petitioner.Manager.Id == (int.Parse(userCookieID))))
-                {
-                    ManagedVac.Add(vacation);
-                }
-            }
-            return Ok(ManagedVac);
+            var users = await _userRepository.GetAllAsync();
+            var query = from user in users
+                        where user.Manager != null && user.Manager.Id == int.Parse(userCookieID)
+                        select user;
+            return Ok(query);
         }
+
 
         [HttpPost("Create")]
         public async Task<IActionResult> Create(VacationDto vacation)
