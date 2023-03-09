@@ -107,7 +107,7 @@ namespace WebApplication2.Controllers.Api
             User petitioner = await _userRepository.GetByIdAsync(int.Parse(userCookieID));
             if (userCookieID != vacation.PetitionerId.ToString())
             {
-                return Forbid("Forbidden");
+                return StatusCode(StatusCodes.Status401Unauthorized, "Forbidden");
             }
             Vacation vacationRequest = vacation.ToModel(petitioner);
             //check if the user insert sat or sun date

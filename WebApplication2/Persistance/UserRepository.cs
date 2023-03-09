@@ -24,7 +24,7 @@ namespace WebApplication2.Persistance
 
                 return user;
             }
-            catch
+            catch (Exception ex)
             {
                 return null;
             }
@@ -55,7 +55,7 @@ namespace WebApplication2.Persistance
                 await _context.SaveChangesAsync();
                 return user;
             }
-            catch
+            catch (Exception ex)
             {
                 return null;
             }
@@ -73,7 +73,7 @@ namespace WebApplication2.Persistance
                 return result;
 
             }
-            catch
+            catch (Exception ex)
             {
 
                 return null;

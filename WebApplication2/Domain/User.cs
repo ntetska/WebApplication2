@@ -28,11 +28,13 @@ namespace WebApplication2.Domain
         {
             return new UserDTO
             {
+                Id = Id,
                 Username = Username,
                 FirstName = FirstName,
                 LastName = LastName,
                 Number = Number,
-                Email = Email
+                Email = Email,
+                Role = Role
             };
         }
         //public void ToDDD(UserDDD userDDD)
@@ -54,19 +56,23 @@ namespace WebApplication2.Domain
     //}
     public class UserDTO
     {
+        public int Id { get; set; }
         public string Username { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Number { get; set; }
         public string? Email { get; set; }
+        public UserRole Role { get; set; }
 
         public void ToModel(User user)
         {
+            user.Id = Id;
             user.Username = Username;
             user.FirstName = FirstName;
             user.LastName = LastName;
             user.Number = Number;
             user.Email = Email;
+            user.Role = Role;
         }
     }
 

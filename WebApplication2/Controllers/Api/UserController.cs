@@ -81,8 +81,6 @@ namespace WebApplication2.Controllers.Api
         [HttpPost("Create")]
         public async Task<IActionResult> Create([FromForm] User user)
         {
-            
-
             RegistrationRequest request = new RegistrationRequest();
             //check the required fields
             if (user.Username == string.Empty)
@@ -118,7 +116,8 @@ namespace WebApplication2.Controllers.Api
 
             request.Applicant = user;
             request = await _requestRepository.AddAsync(request);
-            return Ok(user);
+            var userDto = user.ToDTO();
+            return Ok(userDto);
         }
 
         [Authorize(Roles = "Admin")]
@@ -131,7 +130,8 @@ namespace WebApplication2.Controllers.Api
             User manager = await _userRepository.GetByIdAsync(managerId);
             user.Manager = manager;
             await _userRepository.UpdateAsync(user);
-            return Ok();
+            var userDto = user.ToDTO();
+            return Ok(userDto);
         }
 
         [HttpPut("Update/{id}")]
