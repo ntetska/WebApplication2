@@ -1,7 +1,8 @@
-﻿ using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using WebApplication2.Domain;
+using WebApplication2.Resources;
 using WebApplication2.Services;
 
 namespace WebApplication2.Controllers.Api
@@ -12,8 +13,8 @@ namespace WebApplication2.Controllers.Api
     {
         private readonly IRepository<RegistrationRequest> _requestRepository;
         private readonly IRepository<User> _userRepository;
-        private readonly IStringLocalizer<RequestController> _sharedResourceLocalizer;
-        public RequestController(IRepository<RegistrationRequest> requestRepository, IRepository<User> userRepository,IStringLocalizer<RequestController> sharedResourceLocalizer)
+        private readonly IStringLocalizer<Localizer> _sharedResourceLocalizer;
+        public RequestController(IRepository<RegistrationRequest> requestRepository, IRepository<User> userRepository,IStringLocalizer<Localizer> sharedResourceLocalizer)
         {
             _requestRepository = requestRepository;
             _userRepository = userRepository;

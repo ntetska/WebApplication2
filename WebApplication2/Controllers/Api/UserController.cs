@@ -5,6 +5,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using WebApplication2.Domain;
+using WebApplication2.Resources;
 using WebApplication2.Services;
 
 namespace WebApplication2.Controllers.Api
@@ -17,8 +18,8 @@ namespace WebApplication2.Controllers.Api
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<RegistrationRequest> _requestRepository;
         private readonly PasswordHasher<User> _passwordHasher;
-        private readonly IStringLocalizer<UserController> _sharedResourceLocalizer;
-        public UserController(IRepository<User> userRepository, IRepository<RegistrationRequest> requestRepository, PasswordHasher<User> passwordHasher, IStringLocalizer<UserController> sharedResourceLocalizer)
+        private readonly IStringLocalizer<Localizer> _sharedResourceLocalizer;
+        public UserController(IRepository<User> userRepository, IRepository<RegistrationRequest> requestRepository, PasswordHasher<User> passwordHasher, IStringLocalizer<Localizer> sharedResourceLocalizer)
         {
             _userRepository = userRepository;
             _requestRepository = requestRepository;

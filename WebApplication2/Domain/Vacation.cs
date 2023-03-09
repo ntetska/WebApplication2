@@ -25,6 +25,7 @@ namespace WebApplication2.Domain {
             return new VacationDto
             {
                 PetitionerId = PetitionerId,
+                Petitioner = Petitioner,
                 StartDate = DateOnly.FromDateTime(StartDate),
                 EndDate = DateOnly.FromDateTime(EndDate)
             };
@@ -36,6 +37,7 @@ namespace WebApplication2.Domain {
     public class VacationDto
     {
         public int PetitionerId { get; set; }
+        public User Petitioner { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
         public Vacation ToModel(User user)

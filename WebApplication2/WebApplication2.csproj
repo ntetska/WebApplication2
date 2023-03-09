@@ -30,11 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\Controllers\Api\UserController\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Controllers\Api\UserController.en-US.resx">
+    <EmbeddedResource Update="Resources\Resources\Localizer.en-US.resx">
       <Generator></Generator>
     </EmbeddedResource>
   </ItemGroup>
