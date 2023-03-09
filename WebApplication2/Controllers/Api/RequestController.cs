@@ -69,7 +69,7 @@ namespace WebApplication2.Controllers.Api
             if (request.Condition == RequestCondition.Rejected)
             {
                 RejectedRequests.Add(request);
-                return Ok("the request is rejected!");
+                return Ok(_sharedResourceLocalizer["RejectedRequest"].Value);
             }
            
             return Ok(request);

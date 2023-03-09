@@ -117,40 +117,49 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ACTIVE" xml:space="preserve">
-    <value>The user is not active.</value>
-  </data>
-  <data name="CONDITION" xml:space="preserve">
-    <value>The request is not pending.</value>
-  </data>
-  <data name="DATE" xml:space="preserve">
-    <value>EndDate must be greater than or equal to StartDate.</value>
-  </data>
-  <data name="EMAIL" xml:space="preserve">
+  <data name="EmptyMail" xml:space="preserve">
     <value>The email cn not be empty.</value>
   </data>
-  <data name="ERROR" xml:space="preserve">
-    <value>Something went wrong.</value>
-  </data>
-  <data name="FIELD" xml:space="preserve">
-    <value>The field is null.</value>
-  </data>
-  <data name="PASSWORD" xml:space="preserve">
+  <data name="EmptyPassword" xml:space="preserve">
     <value>The password can not be empty</value>
   </data>
-  <data name="PHONE1" xml:space="preserve">
-    <value>Phone number must be a length of 10 .</value>
-  </data>
-  <data name="PHONE2" xml:space="preserve">
+  <data name="EmptyPhoneNumber" xml:space="preserve">
     <value>The phone number can not be empty.</value>
   </data>
-  <data name="REJECT" xml:space="preserve">
-    <value>The request is rejected!</value>
-  </data>
-  <data name="USERNAME" xml:space="preserve">
+  <data name="EmptyUsername" xml:space="preserve">
     <value>Username field can not be empty.</value>
   </data>
-  <data name="WEEKEND" xml:space="preserve">
+  <data name="Error" xml:space="preserve">
+    <value>Something went wrong.</value>
+  </data>
+  <data name="falseEndDate" xml:space="preserve">
+    <value>EndDate must be greater than or equal to StartDate.</value>
+  </data>
+  <data name="Field" xml:space="preserve">
+    <value>The field is null.</value>
+  </data>
+  <data name="notAccess" xml:space="preserve">
+    <value>Access Denied!</value>
+  </data>
+  <data name="notActive" xml:space="preserve">
+    <value>The user is not active.</value>
+  </data>
+  <data name="PhoneLength" xml:space="preserve">
+    <value>Phone number must be a length of 10 .</value>
+  </data>
+  <data name="RejectedRequest" xml:space="preserve">
+    <value>The request is rejected!</value>
+  </data>
+  <data name="RequestCondition" xml:space="preserve">
+    <value>The request is not pending.</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Unauthorized user.</value>
+  </data>
+  <data name="Weekend" xml:space="preserve">
     <value>Start date or End date is weeknend day.</value>
+  </data>
+  <data name="WrongData" xml:space="preserve">
+    <value>The data does not correspond to a user!</value>
   </data>
 </root>

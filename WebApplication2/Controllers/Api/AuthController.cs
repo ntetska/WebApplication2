@@ -6,6 +6,7 @@ using System.Security.Claims;
 using WebApplication2.Persistance;
 using WebApplication2.Domain;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Localization;
 
 namespace WebApplication2.Controllers.Api;
 [Route("api/[controller]")]
@@ -15,10 +16,13 @@ public class AuthController : ControllerBase
 {
     private readonly UserRepository _userRepository;
     private readonly PasswordHasher<User> _passwordHasher;
-    public AuthController(UserRepository userRepository, PasswordHasher<User> passwordHasher)
+    private readonly IStringLocalizer<AuthController> _sharedResourceLocalizer;
+
+    public AuthController(UserRepository userRepository, PasswordHasher<User> passwordHasher, IStringLocalizer<AuthController> stringLocalizer)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
+        _sharedResourceLocalizer = stringLocalizer;
     }
 
     [AllowAnonymous]
@@ -29,17 +33,17 @@ public class AuthController : ControllerBase
         var user = await _userRepository.GetByUsernameAsync(username);
         if (user == null)
         {
-            return Unauthorized("The data does not correspond to a user!");
+            return Unauthorized(_sharedResourceLocalizer["WrongData"].Value);
         }
         var result = _passwordHasher.VerifyHashedPassword(user, user.Password, password);
         //check user's password & activity
         if (result == PasswordVerificationResult.Failed)
         {
-            return Unauthorized("Unathorized user");
+            return Unauthorized(_sharedResourceLocalizer["Unauthorized"].Value);
         }
         if (user.IsActive == false)
         {
-            return Unauthorized("Unathorized user");
+            return Unauthorized(_sharedResourceLocalizer["Unauthorized"].Value);
         }
         var claims = new List<Claim>
         {
@@ -68,6 +72,6 @@ public class AuthController : ControllerBase
     [HttpGet("AccessDenied")]
     public IActionResult AccessDenied()
     {
-        return Forbid("Access Denied");
+        return Forbid(_sharedResourceLocalizer["notAccess"].Value);
     }
 }

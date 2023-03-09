@@ -79,26 +79,26 @@ namespace WebApplication2.Controllers.Api
             //check the required fields
             if (user.Username == string.Empty)
             {
-                return BadRequest(_sharedResourceLocalizer["USERNAME"].Value);
+                return BadRequest(_sharedResourceLocalizer["EmptyUsername"].Value);
             }
             if (user.Password == string.Empty)
             {
-                return BadRequest(_sharedResourceLocalizer["USERNAME"]);
+                return BadRequest(_sharedResourceLocalizer["EmptyPassword"].Value);
             }
 
             user.Password = _passwordHasher.HashPassword(user,user.Password);
 
             if (user.Number.IsNullOrEmpty())
             {
-                return BadRequest("Number is needed");
+                return BadRequest(_sharedResourceLocalizer["EmptyPhoneNumber"].Value);
             }
             if (user.Number.Length != 10)
             {
-                return BadRequest("Number must be a length of 10");
+                return BadRequest(_sharedResourceLocalizer["PhoneLength"].Value);
             }
             if (user.Email == string.Empty)
             {
-                return BadRequest("Email is needed");
+                return BadRequest(_sharedResourceLocalizer["EmptyMail"].Value);
             }
 
             user = await _userRepository.AddAsync(user);
@@ -140,25 +140,25 @@ namespace WebApplication2.Controllers.Api
             //check the required fields
             if (userDto.Username == string.Empty)
             {
-                return BadRequest("Username is needed");
+                return BadRequest(_sharedResourceLocalizer["EmptyUsername"].Value);
             }
             if (userDto.Password == string.Empty)
             {
-                return BadRequest("Password is needed");
+                return BadRequest(_sharedResourceLocalizer["EmptyPassword"].Value);
             }
             userDto.Password = _passwordHasher.HashPassword(user, userDto.Password);
 
             if (userDto.Number.IsNullOrEmpty())
             {
-                return BadRequest("Number is needed");
+                return BadRequest(_sharedResourceLocalizer["EmptyPhoneNumber"].Value);
             }
             if (userDto.Number.Length != 10)
             {
-                return BadRequest("Number must be a length of 10");
+                return BadRequest(_sharedResourceLocalizer["PhoneLength"].Value);
             }
             if (userDto.Email == string.Empty)
             {
-                return BadRequest("Email is needed");
+                return BadRequest(_sharedResourceLocalizer["EmptyMail"].Value);
             }
             userDto.ToModel(user);
       

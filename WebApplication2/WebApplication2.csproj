@@ -33,4 +33,10 @@
     <Folder Include="Resources\Controllers\Api\UserController\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Controllers\Api\UserController.en-US.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

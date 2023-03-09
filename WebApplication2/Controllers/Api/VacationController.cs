@@ -100,13 +100,13 @@ namespace WebApplication2.Controllers.Api
             {
                 if (date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday)
                 {
-                    return BadRequest("start date or end date is weeknend day");
+                    return BadRequest(_sharedResourceLocalizer["Weekend"].Value);
                 }
             }
             //check validity of days
             if (vacation.EndDate < vacation.StartDate)
             {
-                return BadRequest("endDate must be greater than or equal to startDate");
+                return BadRequest(_sharedResourceLocalizer["falseEndDate"].Value);
             }
             if (petitioner.Role == UserRole.Manager)
             {
@@ -139,7 +139,7 @@ namespace WebApplication2.Controllers.Api
             }
             if (vacation.Status != VacationStatus.Pending)
             {
-                return BadRequest("The request is not pending");
+                return BadRequest(_sharedResourceLocalizer["RequestCondition"].Value);
             }
             //if approved, type gets a value
             if (isVacactionStatus && statusRes == VacationStatus.Accepted)

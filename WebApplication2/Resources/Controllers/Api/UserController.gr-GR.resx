@@ -117,40 +117,49 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ACTIVE" xml:space="preserve">
-    <value>Ο χρήστης δεν είναι ενεργός.</value>
-  </data>
-  <data name="CONDITION" xml:space="preserve">
-    <value>Το αίτημα δεν εκκεμεί.</value>
-  </data>
-  <data name="DATE" xml:space="preserve">
-    <value>Η αρχική μερα θα πρέπει να προηγείται της τελευταίας μέρας άδειας.</value>
-  </data>
-  <data name="EMAIL" xml:space="preserve">
+  <data name="EmptyMail" xml:space="preserve">
     <value>Η ηλεκτρονική διεύθυνση δεν μπορεί να είναι κενή.</value>
   </data>
-  <data name="ERROR" xml:space="preserve">
-    <value>Κάτι πήγε λάθος.</value>
-  </data>
-  <data name="FIELD" xml:space="preserve">
-    <value>Το πεδίο είναι μηδενικό.</value>
-  </data>
-  <data name="PASSWORD" xml:space="preserve">
+  <data name="EmptyPassword" xml:space="preserve">
     <value>Ο κωδικός δεν μπορεί να είναι κενός.</value>
   </data>
-  <data name="PHONE1" xml:space="preserve">
-    <value>Ο αριθμός πρέπει να έχει μήκος 10.</value>
-  </data>
-  <data name="PHONE2" xml:space="preserve">
+  <data name="EmptyPhoneNumber" xml:space="preserve">
     <value>Ο αριθμός τηλεφώνου δεν μπορεί να είναι κενός.</value>
   </data>
-  <data name="REJECT" xml:space="preserve">
-    <value>Το αίτημα έχει διαγραφεί.</value>
-  </data>
-  <data name="USERNAME" xml:space="preserve">
+  <data name="EmptyUsername" xml:space="preserve">
     <value>Το όνομα χρήστη δεν μπορεί να είναι κενό.</value>
   </data>
-  <data name="WEEKEND" xml:space="preserve">
+  <data name="Error" xml:space="preserve">
+    <value>Κάτι πήγε λάθος.</value>
+  </data>
+  <data name="falseEndDate" xml:space="preserve">
+    <value>Η αρχική μερα θα πρέπει να προηγείται της τελευταίας μέρας άδειας.</value>
+  </data>
+  <data name="Field" xml:space="preserve">
+    <value>Το πεδίο είναι μηδενικό.</value>
+  </data>
+  <data name="notAccess" xml:space="preserve">
+    <value>Δεν επιτρέπεται η πρόσβαση!</value>
+  </data>
+  <data name="notActive" xml:space="preserve">
+    <value>Ο χρήστης δεν είναι ενεργός.</value>
+  </data>
+  <data name="PhoneLength" xml:space="preserve">
+    <value>Ο αριθμός πρέπει να έχει μήκος 10.</value>
+  </data>
+  <data name="RejectedRequest" xml:space="preserve">
+    <value>Το αίτημα έχει διαγραφεί.</value>
+  </data>
+  <data name="RequestCondition" xml:space="preserve">
+    <value>Το αίτημα δεν εκκεμεί.</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Μη εξουσιοδοτημένος χρήστης.</value>
+  </data>
+  <data name="Weekend" xml:space="preserve">
     <value>Οι ημερομηνίες περιλαμβάνουν σαββατοκύριακο.</value>
+  </data>
+  <data name="WrongData" xml:space="preserve">
+    <value>Τα στοιχεία δεν αντιστοιχούν σε χρήστη!</value>
   </data>
 </root>
