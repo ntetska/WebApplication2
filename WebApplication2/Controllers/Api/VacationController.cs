@@ -33,7 +33,8 @@ namespace WebApplication2.Controllers.Api
             {
                 return StatusCode(StatusCodes.Status401Unauthorized, "Unathorized user");
             }
-            return Ok(vacation);
+            var vacationDto = vacation.ToDto();
+            return Ok(vacationDto);
         }
 
         [Authorize(Roles = "Admin")]
@@ -41,7 +42,14 @@ namespace WebApplication2.Controllers.Api
         public async Task<IActionResult> GetAll()
         {
             var vacations = await _vacationRepository.GetAllAsync();
-            return Ok(vacations);
+            List<VacationDto> vacationsDto= new List<VacationDto>();
+            foreach (var vacation in vacations)
+            {
+                var vacationDto = vacation.ToDto();
+                vacationsDto.Add(vacationDto);
+
+            }
+            return Ok(vacationsDto);
         }
 
         [Authorize(Roles = "Manager")]
@@ -49,7 +57,8 @@ namespace WebApplication2.Controllers.Api
         public async Task<IActionResult> GetSingle(int id)
         {
             var vacation = await _vacationRepository.GetByIdAsync(id);
-            return Ok(vacation);
+            var vacationDto = vacation.ToDto();
+            return Ok(vacationDto);
         }
 
         //[Authorize(Roles = "Manager")]
@@ -76,12 +85,18 @@ namespace WebApplication2.Controllers.Api
         [HttpGet("ManagedVac")]
         public async Task<IActionResult> GetAllAsync()
         {
+            List<VacationDto> vacationsDto = new List<VacationDto>();
             var userCookieID = HttpContext.User.FindFirstValue("Id");
             var users = await _userRepository.GetAllAsync();
             IEnumerable<Vacation> query = users
                                         .Where(u => u.Manager != null && u.Manager.Id == Convert.ToInt32(userCookieID))
                                                 .SelectMany(s=>s.Vacation);
-            return Ok(query);
+            foreach (Vacation vacation in query)
+            {
+                var vacationDto = vacation.ToDto();
+                vacationsDto.Add(vacationDto);
+            }
+            return Ok(vacationsDto);
         }
 
 
@@ -209,7 +224,8 @@ namespace WebApplication2.Controllers.Api
                 vacations.Add(vacation);
             }
             vacation = await _vacationRepository.UpdateAsync(vacation);
-            return Ok(vacation);
+            var vacationDto = vacation.ToDto();
+            return Ok(vacationDto);
         }
 
         //user can delete only his vacation
@@ -229,7 +245,8 @@ namespace WebApplication2.Controllers.Api
             {
                 return BadRequest();
             }
-            return Ok(vacation);
+            var vacationDto = vacation.ToDto();
+            return Ok(vacationDto);
         }
     }
 }

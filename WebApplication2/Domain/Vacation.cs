@@ -19,6 +19,16 @@ namespace WebApplication2.Domain {
         public double StudyLeave { get; set; } = 18;
         public VacationType Type { get; set; } 
         public VacationStatus Status { get; set; } = VacationStatus.Pending;
+
+        public VacationDto ToDto()
+        {
+            return new VacationDto
+            {
+                PetitionerId = PetitionerId,
+                StartDate = DateOnly.FromDateTime(StartDate),
+                EndDate = DateOnly.FromDateTime(EndDate)
+            };
+        }
     }
 
 

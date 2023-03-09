@@ -21,6 +21,7 @@ namespace WebApplication2.Persistance
             {
                 await _context.User.AddAsync(user);
                 await _context.SaveChangesAsync();
+
                 return user;
             }
             catch
@@ -31,14 +32,14 @@ namespace WebApplication2.Persistance
         public async Task<List<User>> GetAllAsync()
         { 
             var result = await _context.User
-                .Include(s=>s.Vacation)
+                .Include(u => u.Vacation)
                 .ToListAsync();
             return result;
         }
         //TO DO
         public async Task<User> GetByIdAsync(int id)
         {
-            var user = await _context.User.Where(e => e.Id == id).Include(m => m.Manager).FirstOrDefaultAsync();
+            var user = await _context.User.Where(u => u.Id == id).Include(u => u.Manager).FirstOrDefaultAsync();
             return user;
         }
         public async Task<User> GetByUsernameAsync(string username)
@@ -46,7 +47,7 @@ namespace WebApplication2.Persistance
             var result = await _context.User.Where(u => u.Username == username).FirstOrDefaultAsync();
             return result;
         }
-        public async Task<User> UpdateAsync(User user)
+        public async Task<User?> UpdateAsync(User user)
         {
             try
             {
@@ -63,7 +64,7 @@ namespace WebApplication2.Persistance
         {
             try
             {
-                var result = await _context.User.Where(k => k.Id == id).FirstOrDefaultAsync();
+                var result = await _context.User.Where(u => u.Id == id).FirstOrDefaultAsync();
                 if (result != null)
                 {
                     _context.User.Remove(result);

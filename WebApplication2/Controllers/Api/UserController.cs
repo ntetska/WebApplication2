@@ -31,7 +31,8 @@ namespace WebApplication2.Controllers.Api
         {
             var userCookieID = HttpContext.User.FindFirstValue("Id");
             var user = await _userRepository.GetByIdAsync(Int32.Parse(userCookieID));
-            return Ok(user);
+            var userDto = user.ToDTO();
+            return Ok(userDto);
         }
 
         [Authorize(Roles = "Admin")]
@@ -47,24 +48,31 @@ namespace WebApplication2.Controllers.Api
         public async Task<IActionResult> GetAll()
         {
             var users = await _userRepository.GetAllAsync();
-            return Ok(users);
+            List<UserDTO> userDTOs = new List<UserDTO>();
+            foreach (var user in users)
+            {
+                var userDto = user.ToDTO();
+                userDTOs.Add(userDto);
+            }
+            return Ok(userDTOs);
         }
 
         [Authorize(Roles = "Manager")]
         [HttpGet("GetManagedUsers")]
         public async Task<IActionResult> GetAllAsync()
         {
-            List<User> ManagedUsers = new List<User>();
+            List<UserDTO> ManagedUsers = new List<UserDTO>();
 
             var userCookieID = HttpContext.User.FindFirstValue("Id");
 
-            List<User> users = await _userRepository.GetAllAsync();
+            var users = await _userRepository.GetAllAsync();
 
-            foreach (var user in users)
+            foreach (var user in users) 
             {
                 if (user.Manager != null && (user.Manager.Id == (int.Parse(userCookieID))))
                 {
-                    ManagedUsers.Add(user);
+                    var userDto = user.ToDTO();
+                    ManagedUsers.Add(userDto);
                 }
             }
             return Ok(ManagedUsers);
@@ -127,7 +135,7 @@ namespace WebApplication2.Controllers.Api
         }
 
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> Update(UserDTO userDto, int id)
+        public async Task<IActionResult> Update(User user, int id)
         {
             var userCookieID = HttpContext.User.FindFirstValue("Id");
             if (userCookieID != id.ToString())
@@ -135,40 +143,38 @@ namespace WebApplication2.Controllers.Api
                 return StatusCode(StatusCodes.Status401Unauthorized, "Unathorized user");
             }
             //var user = await _userRepository.GetByIdAsync(Int32.Parse(id));
-            User user = await _userRepository.GetByIdAsync(id);
+            user = await _userRepository.GetByIdAsync(id);
 
             //check the required fields
-            if (userDto.Username == string.Empty)
+            if (user.Username == string.Empty)
             {
                 return BadRequest(_sharedResourceLocalizer["EmptyUsername"].Value);
             }
-            if (userDto.Password == string.Empty)
+            if (user.Password == string.Empty)
             {
                 return BadRequest(_sharedResourceLocalizer["EmptyPassword"].Value);
             }
-            userDto.Password = _passwordHasher.HashPassword(user, userDto.Password);
+            user.Password = _passwordHasher.HashPassword(user, user.Password);
 
-            if (userDto.Number.IsNullOrEmpty())
+            if (user.Number.IsNullOrEmpty())
             {
                 return BadRequest(_sharedResourceLocalizer["EmptyPhoneNumber"].Value);
             }
-            if (userDto.Number.Length != 10)
+            if (user.Number.Length != 10)
             {
                 return BadRequest(_sharedResourceLocalizer["PhoneLength"].Value);
             }
-            if (userDto.Email == string.Empty)
+            if (user.Email == string.Empty)
             {
                 return BadRequest(_sharedResourceLocalizer["EmptyMail"].Value);
             }
-            userDto.ToModel(user);
-      
             user = await _userRepository.UpdateAsync(user);
 
             if (user == null)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-
+            var userDto = user.ToDTO();
             return Ok(user);
         }
 
@@ -181,7 +187,8 @@ namespace WebApplication2.Controllers.Api
 			{
 				return new StatusCodeResult(StatusCodes.Status500InternalServerError);
 			}
-			return Ok(user);
+            var userDto = user.ToDTO();
+			return Ok(userDto);
 		}
 	}
 }

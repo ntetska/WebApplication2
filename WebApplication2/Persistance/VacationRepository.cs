@@ -35,12 +35,12 @@ namespace WebApplication2.Persistance
             //var result = await _context.Vacation.ToListAsync();
             return result;
         }
-        public async Task<Vacation> GetByIdAsync(int id)
+        public async Task<Vacation?> GetByIdAsync(int id)
         {
             var result = await _context.Vacation.Where(v => v.Id == id).Include(x => x.Petitioner).ThenInclude(x => x.Manager).FirstOrDefaultAsync();
             return result;
         }
-        public async Task<Vacation> UpdateAsync(Vacation vacation)
+        public async Task<Vacation?> UpdateAsync(Vacation vacation)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace WebApplication2.Persistance
             }
 
         }
-        public async Task<Vacation> DeleteAsync(int id)
+        public async Task<Vacation?> DeleteAsync(int id)
         {
             try
             {

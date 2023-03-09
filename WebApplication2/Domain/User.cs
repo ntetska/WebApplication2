@@ -24,36 +24,37 @@ namespace WebApplication2.Domain
         public List<Vacation> Vacation { get; set; } = new List<Vacation>();
         public bool IsActive { get; set; } = false;
 
-        public void ToDTO(UserDTO userDto)
+        public UserDTO ToDTO()
         {
-            userDto.Username = Username;
-            userDto.Password = Password;
-            userDto.FirstName = FirstName;
-            userDto.LastName = LastName;
-            userDto.Number = Number;
-            userDto.Email = Email;
+            return new UserDTO
+            {
+                Username = Username,
+                FirstName = FirstName,
+                LastName = LastName,
+                Number = Number,
+                Email = Email
+            };
         }
-        public void ToDDD(UserDDD userDDD)
-        {
-            userDDD.Username = Username;
-            userDDD.Number = Number;
-        }
+        //public void ToDDD(UserDDD userDDD)
+        //{
+        //    userDDD.Username = Username;
+        //    userDDD.Number = Number;
+        //}
     }
 
-    public class UserDDD
-    {
-        public string Username { get; set; }
-        public string Number { get; set; }
-        public void ToModel(User user)
-        {
-            user.Username = Username;
-            user.Number = Number;
-        }
-    }
+    //public class UserDDD
+    //{
+    //    public string Username { get; set; }
+    //    public string Number { get; set; }
+    //    public void ToModel(User user)
+    //    {
+    //        user.Username = Username;
+    //        user.Number = Number;
+    //    }
+    //}
     public class UserDTO
     {
         public string Username { get; set; }
-        public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Number { get; set; }
@@ -62,7 +63,6 @@ namespace WebApplication2.Domain
         public void ToModel(User user)
         {
             user.Username = Username;
-            user.Password = Password;
             user.FirstName = FirstName;
             user.LastName = LastName;
             user.Number = Number;
