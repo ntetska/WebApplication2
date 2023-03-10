@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using AdeiesApplication.Domain;
 using AdeiesApplication.Resources;
-using AdeiesApplication.Services;
+using AdeiesApplication.Persistance;
 
 namespace AdeiesApplication.Controllers.Api
 {
@@ -11,10 +11,10 @@ namespace AdeiesApplication.Controllers.Api
     [ApiController]
     public class RequestController : ControllerBase
     {
-        private readonly IRepository<RegistrationRequest> _requestRepository;
-        private readonly IRepository<User> _userRepository;
+        private readonly RequestRepository _requestRepository;
+        private readonly UserRepository _userRepository;
         private readonly IStringLocalizer<Localizer> _sharedResourceLocalizer;
-        public RequestController(IRepository<RegistrationRequest> requestRepository, IRepository<User> userRepository,IStringLocalizer<Localizer> sharedResourceLocalizer)
+        public RequestController(RequestRepository requestRepository, UserRepository userRepository,IStringLocalizer<Localizer> sharedResourceLocalizer)
         {
             _requestRepository = requestRepository;
             _userRepository = userRepository;

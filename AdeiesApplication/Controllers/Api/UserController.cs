@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using AdeiesApplication.Domain;
 using AdeiesApplication.Resources;
-using AdeiesApplication.Services;
+using AdeiesApplication.Persistance;
 
 namespace AdeiesApplication.Controllers.Api
 {
@@ -15,11 +15,11 @@ namespace AdeiesApplication.Controllers.Api
     [Authorize]
     public class UserController : ControllerBase
     {
-        private readonly IRepository<User> _userRepository;
-        private readonly IRepository<RegistrationRequest> _requestRepository;
+        private readonly UserRepository _userRepository;
+        private readonly RequestRepository _requestRepository;
         private readonly PasswordHasher<UserCreate> _passwordHasher;
         private readonly IStringLocalizer<Localizer> _sharedResourceLocalizer;
-        public UserController(IRepository<User> userRepository, IRepository<RegistrationRequest> requestRepository, PasswordHasher<UserCreate> passwordHasher, IStringLocalizer<Localizer> sharedResourceLocalizer)
+        public UserController(UserRepository userRepository, RequestRepository requestRepository, PasswordHasher<UserCreate> passwordHasher, IStringLocalizer<Localizer> sharedResourceLocalizer)
         {
             _userRepository = userRepository;
             _requestRepository = requestRepository;

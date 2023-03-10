@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using AdeiesApplication.Domain;
 using AdeiesApplication.Persistance;
-using AdeiesApplication.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using System.Globalization;
@@ -20,7 +19,6 @@ internal class Program
         // Add services to the container
         builder.Services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -38,10 +36,6 @@ internal class Program
         });
 
         //add localization
-        
-
-      
-        
         builder.Services.AddLocalization(opt=>opt.ResourcesPath = "Resources");
         builder.Services.Configure<RequestLocalizationOptions>(opt =>{
             var supportedCultures = new[]
@@ -65,9 +59,8 @@ internal class Program
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
         builder.Services.AddScoped<UserRepository>();
-        builder.Services.AddScoped<IRepository<User>, UserRepository>();
-        builder.Services.AddScoped<IRepository<RegistrationRequest>, RequestRepository>();
-        builder.Services.AddScoped<IRepository<Vacation>, VacationRepository>();
+        builder.Services.AddScoped<RequestRepository>();
+        builder.Services.AddScoped<VacationRepository>();
         builder.Services.AddScoped<PasswordHasher<User>>();
 
         //http

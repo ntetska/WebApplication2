@@ -1,11 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using AdeiesApplication.Domain;
-using AdeiesApplication.Services;
-
 
 namespace AdeiesApplication.Persistance
 {
-    public class UserRepository : IRepository<User>
+    public class UserRepository 
     {
         private readonly ApplicationDbContext _context;
 

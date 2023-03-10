@@ -2,12 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AdeiesApplication.Domain;
-using AdeiesApplication.Services;
-
 
 namespace AdeiesApplication.Persistance
 {  
-    public class RequestRepository : IRepository<RegistrationRequest>
+    public class RequestRepository
     {
         private readonly ApplicationDbContext _context;
         private User applicant;

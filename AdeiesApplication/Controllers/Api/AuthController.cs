@@ -7,6 +7,7 @@ using AdeiesApplication.Persistance;
 using AdeiesApplication.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
+using AdeiesApplication.Resources;
 
 namespace AdeiesApplication.Controllers.Api;
 [Route("api/[controller]")]
@@ -16,9 +17,9 @@ public class AuthController : ControllerBase
 {
     private readonly UserRepository _userRepository;
     private readonly PasswordHasher<User> _passwordHasher;
-    private readonly IStringLocalizer<AuthController> _sharedResourceLocalizer;
+    private readonly IStringLocalizer<Localizer> _sharedResourceLocalizer;
 
-    public AuthController(UserRepository userRepository, PasswordHasher<User> passwordHasher, IStringLocalizer<AuthController> stringLocalizer)
+    public AuthController(UserRepository userRepository, PasswordHasher<User> passwordHasher, IStringLocalizer<Localizer> stringLocalizer)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;

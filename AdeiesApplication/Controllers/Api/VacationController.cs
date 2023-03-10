@@ -4,8 +4,7 @@ using Microsoft.Extensions.Localization;
 using System.Security.Claims;
 using AdeiesApplication.Domain;
 using AdeiesApplication.Resources;
-using AdeiesApplication.Services;
-
+using AdeiesApplication.Persistance;
 
 namespace AdeiesApplication.Controllers.Api
 {
@@ -14,12 +13,12 @@ namespace AdeiesApplication.Controllers.Api
     [ApiController]
     public class VacationController : ControllerBase
     {
-        private IRepository<User> _userRepository;
-        private IRepository<Vacation> _vacationRepository;
+        private UserRepository _userRepository;
+        private VacationRepository _vacationRepository;
         private readonly IStringLocalizer<Localizer> _sharedResourceLocalizer;
         public double TotalDays { get; private set; }
 
-        public VacationController(IRepository<Vacation> vacationRepository, IRepository<User> userRepository,IStringLocalizer<Localizer> stringLocalizer)
+        public VacationController(VacationRepository vacationRepository, UserRepository userRepository,IStringLocalizer<Localizer> stringLocalizer)
         {
             _userRepository = userRepository;
             _vacationRepository = vacationRepository;
@@ -99,6 +98,7 @@ namespace AdeiesApplication.Controllers.Api
                     return BadRequest(_sharedResourceLocalizer["Weekend"].Value);
                 }
             }
+            
             //check validity of days
             if (vacation.EndDate < vacation.StartDate)
             {
@@ -128,7 +128,6 @@ namespace AdeiesApplication.Controllers.Api
                 return StatusCode(StatusCodes.Status403Forbidden, "Forbidden");
             }
             var user = await _userRepository.GetByIdAsync(int.Parse(userCookieID));
-
             if (vacation == null)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
