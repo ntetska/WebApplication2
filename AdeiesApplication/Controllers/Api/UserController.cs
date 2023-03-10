@@ -170,7 +170,7 @@ namespace AdeiesApplication.Controllers.Api
             {
                 return BadRequest(_sharedResourceLocalizer["EmptyMail"].Value);
             }
-
+            userCreate.ToModelCreate(user);
             user = await _userRepository.UpdateAsync(user);
 
             if (user == null)
