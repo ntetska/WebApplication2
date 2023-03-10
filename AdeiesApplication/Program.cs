@@ -48,10 +48,6 @@ internal class Program
             opt.SupportedUICultures = supportedCultures;
             opt.SetDefaultCulture("en-US");
             opt.ApplyCurrentCultureToResponseHeaders = true;
-            //opt.RequestCultureProviders = new List<RequestCultureProvider>() {
-             
-            //};
-
         });
 
         builder.Services.AddAuthorization();
@@ -63,39 +59,40 @@ internal class Program
         builder.Services.AddScoped<VacationRepository>();
         builder.Services.AddScoped<PasswordHasher<User>>();
 
-        //http
-        //builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        //builder.Services.AddHttpContextAccessor();
-
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
 
-
-		app.UseForwardedHeaders(new ForwardedHeadersOptions
-		{
-			ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-		});
+		// In case we want to use a secure proxy
+		//app.UseForwardedHeaders(new ForwardedHeadersOptions
+		//{
+		//	ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+		//});
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
 			app.UseExceptionHandler("/Home/Error");
+			// In case we use HTTPS
 			// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-			app.UseHsts();
+			//app.UseHsts();
         }
         else
         {
 			app.UseDeveloperExceptionPage();
-			app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
         }
 
-        app.UseHttpsRedirection();
-        app.UseStaticFiles();
+		// Swagger is needed for now and since we run a Release configuration
+		// for now we will place it here
+		app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        });
+
+		// In case we use HTTPS
+		//app.UseHttpsRedirection();
+		app.UseStaticFiles();
 
         app.UseRouting();
         app.UseRequestLocalization(app.Services.GetService<IOptions<RequestLocalizationOptions>>().Value);    
