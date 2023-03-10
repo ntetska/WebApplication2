@@ -17,9 +17,9 @@ namespace AdeiesApplication.Controllers.Api
     {
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<RegistrationRequest> _requestRepository;
-        private readonly PasswordHasher<User> _passwordHasher;
+        private readonly PasswordHasher<UserCreate> _passwordHasher;
         private readonly IStringLocalizer<Localizer> _sharedResourceLocalizer;
-        public UserController(IRepository<User> userRepository, IRepository<RegistrationRequest> requestRepository, PasswordHasher<User> passwordHasher, IStringLocalizer<Localizer> sharedResourceLocalizer)
+        public UserController(IRepository<User> userRepository, IRepository<RegistrationRequest> requestRepository, PasswordHasher<UserCreate> passwordHasher, IStringLocalizer<Localizer> sharedResourceLocalizer)
         {
             _userRepository = userRepository;
             _requestRepository = requestRepository;
@@ -78,42 +78,44 @@ namespace AdeiesApplication.Controllers.Api
             }
             return Ok(ManagedUsers);
         }
+
         [AllowAnonymous]
         [HttpPost("Create")]
-        public async Task<IActionResult> Create(User user)
+        public async Task<IActionResult> Create(UserCreate userCreate)
         {
+
             RegistrationRequest request = new RegistrationRequest();
             //check the required fields
-            if (user.Username == string.Empty)
+            if (userCreate.Username == string.Empty)
             {
                 return BadRequest(_sharedResourceLocalizer["EmptyUsername"].Value);
             }
-            if (user.Password == string.Empty)
+            if (userCreate.Password == string.Empty)
             {
                 return BadRequest(_sharedResourceLocalizer["EmptyPassword"].Value);
             }
+            userCreate.Password = _passwordHasher.HashPassword(userCreate, userCreate.Password);
 
-            user.Password = _passwordHasher.HashPassword(user,user.Password);
-
-            if (user.Number.IsNullOrEmpty())
+            if (userCreate.Number.IsNullOrEmpty())
             {
                 return BadRequest(_sharedResourceLocalizer["EmptyPhoneNumber"].Value);
             }
-            if (user.Number.Length != 10)
+            if (userCreate.Number.Length != 10)
             {
                 return BadRequest(_sharedResourceLocalizer["PhoneLength"].Value);
             }
-            if (user.Email == string.Empty)
+            if (userCreate.Email == string.Empty)
             {
                 return BadRequest(_sharedResourceLocalizer["EmptyMail"].Value);
             }
+            User user = new User();
+            userCreate.ToModelCreate(user);
             user = await _userRepository.AddAsync(user);
 
             if (user == null)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-
             request.Applicant = user;
             request = await _requestRepository.AddAsync(request);
             var userDto = user.ToDTO();
@@ -135,7 +137,7 @@ namespace AdeiesApplication.Controllers.Api
         }
 
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> Update(User user, int id)
+        public async Task<IActionResult> Update(UserCreate userCreate, int id)
         {
             var userCookieID = HttpContext.User.FindFirstValue("Id");
             if (userCookieID != id.ToString())
@@ -143,31 +145,32 @@ namespace AdeiesApplication.Controllers.Api
                 return StatusCode(StatusCodes.Status401Unauthorized, "Unathorized user");
             }
             //var user = await _userRepository.GetByIdAsync(Int32.Parse(id));
-            user = await _userRepository.GetByIdAsync(id);
+            User user = await _userRepository.GetByIdAsync(id);
 
             //check the required fields
-            if (user.Username == string.Empty)
+            if (userCreate.Username == string.Empty)
             {
                 return BadRequest(_sharedResourceLocalizer["EmptyUsername"].Value);
             }
-            if (user.Password == string.Empty)
+            if (userCreate.Password == string.Empty)
             {
                 return BadRequest(_sharedResourceLocalizer["EmptyPassword"].Value);
             }
-            user.Password = _passwordHasher.HashPassword(user, user.Password);
+            userCreate.Password = _passwordHasher.HashPassword(userCreate, userCreate.Password);
 
-            if (user.Number.IsNullOrEmpty())
+            if (userCreate.Number.IsNullOrEmpty())
             {
                 return BadRequest(_sharedResourceLocalizer["EmptyPhoneNumber"].Value);
             }
-            if (user.Number.Length != 10)
+            if (userCreate.Number.Length != 10)
             {
                 return BadRequest(_sharedResourceLocalizer["PhoneLength"].Value);
             }
-            if (user.Email == string.Empty)
+            if (userCreate.Email == string.Empty)
             {
                 return BadRequest(_sharedResourceLocalizer["EmptyMail"].Value);
             }
+
             user = await _userRepository.UpdateAsync(user);
 
             if (user == null)
@@ -175,7 +178,7 @@ namespace AdeiesApplication.Controllers.Api
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             var userDto = user.ToDTO();
-            return Ok(user);
+            return Ok(userDto);
         }
 
         [Authorize(Roles = "Admin")]

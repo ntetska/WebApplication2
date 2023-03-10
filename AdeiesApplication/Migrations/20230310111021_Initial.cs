@@ -17,15 +17,16 @@ namespace AdeiesApplication.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false),
+                    Number = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HireDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false),
                     ManagerId = table.Column<int>(type: "int", nullable: true),
-                    ManagerUsername = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VacationDays = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -59,6 +60,33 @@ namespace AdeiesApplication.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Vacation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PetitionerId = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AnnualLeave = table.Column<double>(type: "float", nullable: false),
+                    ParentalLeave = table.Column<double>(type: "float", nullable: false),
+                    SickLeave = table.Column<double>(type: "float", nullable: false),
+                    StudyLeave = table.Column<double>(type: "float", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vacation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Vacation_User_PetitionerId",
+                        column: x => x.PetitionerId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Request_ApplicantId",
                 table: "Request",
@@ -69,6 +97,17 @@ namespace AdeiesApplication.Migrations
                 name: "IX_User_ManagerId",
                 table: "User",
                 column: "ManagerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Username",
+                table: "User",
+                column: "Username",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vacation_PetitionerId",
+                table: "Vacation",
+                column: "PetitionerId");
         }
 
         /// <inheritdoc />
@@ -76,6 +115,9 @@ namespace AdeiesApplication.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Request");
+
+            migrationBuilder.DropTable(
+                name: "Vacation");
 
             migrationBuilder.DropTable(
                 name: "User");

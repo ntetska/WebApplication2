@@ -11,20 +11,20 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdeiesApplication.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230224080345_manager")]
-    partial class manager
+    [Migration("20230310111021_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "7.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("WebApplication2.Domain.RegistrationRequest", b =>
+            modelBuilder.Entity("AdeiesApplication.Domain.RegistrationRequest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -49,7 +49,7 @@ namespace AdeiesApplication.Migrations
                     b.ToTable("Request");
                 });
 
-            modelBuilder.Entity("WebApplication2.Domain.User", b =>
+            modelBuilder.Entity("AdeiesApplication.Domain.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,6 +63,9 @@ namespace AdeiesApplication.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("HireDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -103,7 +106,7 @@ namespace AdeiesApplication.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("WebApplication2.Domain.Vacation", b =>
+            modelBuilder.Entity("AdeiesApplication.Domain.Vacation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -111,20 +114,29 @@ namespace AdeiesApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("BeginningDate")
+                    b.Property<double>("AnnualLeave")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("EndingDate")
-                        .HasColumnType("datetime2");
+                    b.Property<double>("ParentalLeave")
+                        .HasColumnType("float");
 
                     b.Property<int>("PetitionerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RestOfVacation")
-                        .HasColumnType("int");
+                    b.Property<double>("SickLeave")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<double>("StudyLeave")
+                        .HasColumnType("float");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -136,28 +148,28 @@ namespace AdeiesApplication.Migrations
                     b.ToTable("Vacation");
                 });
 
-            modelBuilder.Entity("WebApplication2.Domain.RegistrationRequest", b =>
+            modelBuilder.Entity("AdeiesApplication.Domain.RegistrationRequest", b =>
                 {
-                    b.HasOne("WebApplication2.Domain.User", "Applicant")
+                    b.HasOne("AdeiesApplication.Domain.User", "Applicant")
                         .WithOne("Request")
-                        .HasForeignKey("WebApplication2.Domain.RegistrationRequest", "ApplicantId")
+                        .HasForeignKey("AdeiesApplication.Domain.RegistrationRequest", "ApplicantId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Applicant");
                 });
 
-            modelBuilder.Entity("WebApplication2.Domain.User", b =>
+            modelBuilder.Entity("AdeiesApplication.Domain.User", b =>
                 {
-                    b.HasOne("WebApplication2.Domain.User", "Manager")
+                    b.HasOne("AdeiesApplication.Domain.User", "Manager")
                         .WithMany("ManagedUsers")
                         .HasForeignKey("ManagerId");
 
                     b.Navigation("Manager");
                 });
 
-            modelBuilder.Entity("WebApplication2.Domain.Vacation", b =>
+            modelBuilder.Entity("AdeiesApplication.Domain.Vacation", b =>
                 {
-                    b.HasOne("WebApplication2.Domain.User", "Petitioner")
+                    b.HasOne("AdeiesApplication.Domain.User", "Petitioner")
                         .WithMany("Vacation")
                         .HasForeignKey("PetitionerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -166,7 +178,7 @@ namespace AdeiesApplication.Migrations
                     b.Navigation("Petitioner");
                 });
 
-            modelBuilder.Entity("WebApplication2.Domain.User", b =>
+            modelBuilder.Entity("AdeiesApplication.Domain.User", b =>
                 {
                     b.Navigation("ManagedUsers");
 

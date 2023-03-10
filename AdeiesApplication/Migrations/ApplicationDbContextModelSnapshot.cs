@@ -21,7 +21,7 @@ namespace AdeiesApplication.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("WebApplication2.Domain.RegistrationRequest", b =>
+            modelBuilder.Entity("AdeiesApplication.Domain.RegistrationRequest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,10 +43,10 @@ namespace AdeiesApplication.Migrations
                     b.HasIndex("ApplicantId")
                         .IsUnique();
 
-                    b.ToTable("Request", (string)null);
+                    b.ToTable("Request");
                 });
 
-            modelBuilder.Entity("WebApplication2.Domain.User", b =>
+            modelBuilder.Entity("AdeiesApplication.Domain.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -100,10 +100,10 @@ namespace AdeiesApplication.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User");
                 });
 
-            modelBuilder.Entity("WebApplication2.Domain.Vacation", b =>
+            modelBuilder.Entity("AdeiesApplication.Domain.Vacation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -142,31 +142,31 @@ namespace AdeiesApplication.Migrations
 
                     b.HasIndex("PetitionerId");
 
-                    b.ToTable("Vacation", (string)null);
+                    b.ToTable("Vacation");
                 });
 
-            modelBuilder.Entity("WebApplication2.Domain.RegistrationRequest", b =>
+            modelBuilder.Entity("AdeiesApplication.Domain.RegistrationRequest", b =>
                 {
-                    b.HasOne("WebApplication2.Domain.User", "Applicant")
+                    b.HasOne("AdeiesApplication.Domain.User", "Applicant")
                         .WithOne("Request")
-                        .HasForeignKey("WebApplication2.Domain.RegistrationRequest", "ApplicantId")
+                        .HasForeignKey("AdeiesApplication.Domain.RegistrationRequest", "ApplicantId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Applicant");
                 });
 
-            modelBuilder.Entity("WebApplication2.Domain.User", b =>
+            modelBuilder.Entity("AdeiesApplication.Domain.User", b =>
                 {
-                    b.HasOne("WebApplication2.Domain.User", "Manager")
+                    b.HasOne("AdeiesApplication.Domain.User", "Manager")
                         .WithMany("ManagedUsers")
                         .HasForeignKey("ManagerId");
 
                     b.Navigation("Manager");
                 });
 
-            modelBuilder.Entity("WebApplication2.Domain.Vacation", b =>
+            modelBuilder.Entity("AdeiesApplication.Domain.Vacation", b =>
                 {
-                    b.HasOne("WebApplication2.Domain.User", "Petitioner")
+                    b.HasOne("AdeiesApplication.Domain.User", "Petitioner")
                         .WithMany("Vacation")
                         .HasForeignKey("PetitionerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -175,7 +175,7 @@ namespace AdeiesApplication.Migrations
                     b.Navigation("Petitioner");
                 });
 
-            modelBuilder.Entity("WebApplication2.Domain.User", b =>
+            modelBuilder.Entity("AdeiesApplication.Domain.User", b =>
                 {
                     b.Navigation("ManagedUsers");
 

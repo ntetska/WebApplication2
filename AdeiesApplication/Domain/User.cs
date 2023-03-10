@@ -49,7 +49,6 @@ namespace AdeiesApplication.Domain
                 Email = Email,
             };
         }
-
     }
     public class UserCreate
     {
@@ -59,7 +58,7 @@ namespace AdeiesApplication.Domain
         public string LastName { get; set; }
         public string Number { get; set; }
         public string? Email { get; set; }
-        public void ToModel(User user)
+        public void ToModelCreate(User user)
         {
             user.Username = Username;
             user.FirstName = FirstName;
