@@ -61,6 +61,7 @@ namespace AdeiesApplication.Domain
         public void ToModelCreate(User user)
         {
             user.Username = Username;
+            user.Password = Password;
             user.FirstName = FirstName;
             user.LastName = LastName;
             user.Number = Number;

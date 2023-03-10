@@ -61,7 +61,7 @@ internal class Program
         builder.Services.AddScoped<UserRepository>();
         builder.Services.AddScoped<RequestRepository>();
         builder.Services.AddScoped<VacationRepository>();
-        builder.Services.AddScoped<PasswordHasher<User>>();
+        builder.Services.AddScoped<PasswordHasher<UserCreate>>();
 
         //http
         //builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

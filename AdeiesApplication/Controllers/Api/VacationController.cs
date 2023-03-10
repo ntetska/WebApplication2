@@ -98,7 +98,8 @@ namespace AdeiesApplication.Controllers.Api
                     return BadRequest(_sharedResourceLocalizer["Weekend"].Value);
                 }
             }
-            
+            var vacations = await _vacationRepository.GetAllAsync();
+            IEnumerable<Vacation> query = vacations.Where(v => v.Petitioner == petitioner );
             //check validity of days
             if (vacation.EndDate < vacation.StartDate)
             {
