@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HttpOverrides;
 
 internal class Program
 {
@@ -78,19 +79,22 @@ internal class Program
         var app = builder.Build();
 
 
-       var opts= app.Services.GetService<IOptions<RequestLocalizationOptions>>().Value;
-        app.UseRequestLocalization(opts);    
+		app.UseForwardedHeaders(new ForwardedHeadersOptions
+		{
+			ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+		});
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
-            //app.UseExceptionHandler("/Home/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            app.UseHsts();
+			app.UseExceptionHandler("/Home/Error");
+			// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+			app.UseHsts();
         }
         else
         {
-            app.UseSwagger();
+			app.UseDeveloperExceptionPage();
+			app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
@@ -101,6 +105,7 @@ internal class Program
         app.UseStaticFiles();
 
         app.UseRouting();
+        app.UseRequestLocalization(app.Services.GetService<IOptions<RequestLocalizationOptions>>().Value);    
 
         app.UseAuthentication();
         app.UseAuthorization();
