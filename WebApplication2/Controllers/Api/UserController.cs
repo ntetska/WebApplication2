@@ -80,7 +80,7 @@ namespace WebApplication2.Controllers.Api
         }
         [AllowAnonymous]
         [HttpPost("Create")]
-        public async Task<IActionResult> Create([FromForm] User user)
+        public async Task<IActionResult> Create(User user)
         {
             RegistrationRequest request = new RegistrationRequest();
             //check the required fields
@@ -107,7 +107,6 @@ namespace WebApplication2.Controllers.Api
             {
                 return BadRequest(_sharedResourceLocalizer["EmptyMail"].Value);
             }
-
             user = await _userRepository.AddAsync(user);
 
             if (user == null)

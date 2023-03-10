@@ -37,7 +37,6 @@ namespace WebApplication2.Controllers.Api
             var vacationDto = vacation.ToDto();
             return Ok(vacationDto);
         }
-
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
@@ -62,25 +61,6 @@ namespace WebApplication2.Controllers.Api
             return Ok(vacationDto);
         }
 
-        //[Authorize(Roles = "Manager")]
-        //[HttpGet("ManagedVac")]
-        //public async Task<IActionResult> GetAllAsync()
-        //{
-        //    List<Vacation> ManagedVac = new List<Vacation>();
-
-        //    var userCookieID = HttpContext.User.FindFirstValue("Id");
-
-        //    List<Vacation> vacations = await _vacationRepository.GetAllAsync();
-        //    //ελεγχος σε users οχι σε vac
-        //    foreach (var vacation in vacations)
-        //    {
-        //        if (vacation.Petitioner.Manager != null && (vacation.Petitioner.Manager.Id == (int.Parse(userCookieID))))
-        //        {
-        //            ManagedVac.Add(vacation);
-        //        }
-        //    }
-        //    return Ok(ManagedVac);
-        //}
 
         [Authorize(Roles = "Manager")]
         [HttpGet("ManagedVac")]
@@ -123,7 +103,7 @@ namespace WebApplication2.Controllers.Api
             if (vacation.EndDate < vacation.StartDate)
             {
                 return BadRequest(_sharedResourceLocalizer["falseEndDate"].Value);
-            }
+            } 
             if (petitioner.Role == UserRole.Manager)
             {
                 vacationRequest.Status = VacationStatus.Accepted;

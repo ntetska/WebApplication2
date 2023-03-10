@@ -37,23 +37,38 @@ namespace WebApplication2.Domain
                 Role = Role
             };
         }
-        //public void ToDDD(UserDDD userDDD)
-        //{
-        //    userDDD.Username = Username;
-        //    userDDD.Number = Number;
-        //}
-    }
+        public UserCreate ToCreate()
+        {
+            return new UserCreate
+            {
+                Username = Username,
+                Password = Password,
+                FirstName = FirstName,
+                LastName = LastName,
+                Number = Number,
+                Email = Email,
+            };
+        }
 
-    //public class UserDDD
-    //{
-    //    public string Username { get; set; }
-    //    public string Number { get; set; }
-    //    public void ToModel(User user)
-    //    {
-    //        user.Username = Username;
-    //        user.Number = Number;
-    //    }
-    //}
+    }
+    public class UserCreate
+    {
+        public string Username { get; set; }
+        public string FirstName { get; set; }
+        public string Password { get; set; }
+        public string LastName { get; set; }
+        public string Number { get; set; }
+        public string? Email { get; set; }
+        public void ToModel(User user)
+        {
+            user.Username = Username;
+            user.FirstName = FirstName;
+            user.LastName = LastName;
+            user.Number = Number;
+            user.Email = Email;
+
+        }
+    }
     public class UserDTO
     {
         public int Id { get; set; }
