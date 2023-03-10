@@ -1,5 +1,5 @@
 ﻿
-namespace WebApplication2.Services
+namespace AdeiesApplication.Services
 {
     public interface IRepository<T>
     {

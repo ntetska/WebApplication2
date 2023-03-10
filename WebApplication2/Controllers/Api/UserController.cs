@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
-using WebApplication2.Domain;
-using WebApplication2.Resources;
-using WebApplication2.Services;
+using AdeiesApplication.Domain;
+using AdeiesApplication.Resources;
+using AdeiesApplication.Services;
 
-namespace WebApplication2.Controllers.Api
+namespace AdeiesApplication.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]

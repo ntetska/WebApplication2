@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using WebApplication2.Persistance;
-using WebApplication2.Domain;
+using AdeiesApplication.Persistance;
+using AdeiesApplication.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 
-namespace WebApplication2.Controllers.Api;
+namespace AdeiesApplication.Controllers.Api;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]

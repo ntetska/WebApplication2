@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace WebApplication2.Migrations
+namespace AdeiesApplication.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20230223141857_AddColum")]

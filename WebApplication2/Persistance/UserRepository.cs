@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebApplication2.Domain;
-using WebApplication2.Services;
+using AdeiesApplication.Domain;
+using AdeiesApplication.Services;
 
 
-namespace WebApplication2.Persistance
+namespace AdeiesApplication.Persistance
 {
     public class UserRepository : IRepository<User>
     {

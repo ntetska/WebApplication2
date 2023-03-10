@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using WebApplication2.Domain;
-using WebApplication2.Resources;
-using WebApplication2.Services;
+using AdeiesApplication.Domain;
+using AdeiesApplication.Resources;
+using AdeiesApplication.Services;
 
-namespace WebApplication2.Controllers.Api
+namespace AdeiesApplication.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]

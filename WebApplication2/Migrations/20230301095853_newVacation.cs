@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace WebApplication2.Migrations
+namespace AdeiesApplication.Migrations
 {
     /// <inheritdoc />
     public partial class newVacation : Migration

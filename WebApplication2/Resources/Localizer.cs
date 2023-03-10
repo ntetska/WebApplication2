@@ -1,4 +1,4 @@
-﻿namespace WebApplication2.Resources
+﻿namespace AdeiesApplication.Resources
 {
     public class Localizer
     {

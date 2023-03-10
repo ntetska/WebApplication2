@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebApplication2.Domain;
+using AdeiesApplication.Domain;
 public class ApplicationDbContext :DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

@@ -1,4 +1,4 @@
-﻿namespace WebApplication2.Models
+﻿namespace AdeiesApplication.Models
 {
     public class ErrorViewModel
     {

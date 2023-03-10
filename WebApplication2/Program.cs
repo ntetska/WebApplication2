@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using WebApplication2.Domain;
-using WebApplication2.Persistance;
-using WebApplication2.Services;
+using AdeiesApplication.Domain;
+using AdeiesApplication.Persistance;
+using AdeiesApplication.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using System.Globalization;

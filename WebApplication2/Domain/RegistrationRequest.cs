@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 
-namespace WebApplication2.Domain
+namespace AdeiesApplication.Domain
 {
     public class RegistrationRequest
     {

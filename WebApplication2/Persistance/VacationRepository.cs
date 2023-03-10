@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Metrics;
-using WebApplication2.Domain;
-using WebApplication2.Services;
+using AdeiesApplication.Domain;
+using AdeiesApplication.Services;
 
 
 
 
-namespace WebApplication2.Persistance
+namespace AdeiesApplication.Persistance
 {
     public class VacationRepository : IRepository<Vacation>
     {

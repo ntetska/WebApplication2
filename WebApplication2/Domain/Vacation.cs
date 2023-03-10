@@ -3,7 +3,7 @@ using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
 
 
-namespace WebApplication2.Domain {
+namespace AdeiesApplication.Domain {
 
     public class Vacation
     {

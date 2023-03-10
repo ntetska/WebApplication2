@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace WebApplication2.Migrations
+namespace AdeiesApplication.Migrations
 {
     /// <inheritdoc />
     public partial class newColums : Migration
