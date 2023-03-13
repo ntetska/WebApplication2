@@ -5,8 +5,6 @@ using System.Security.Claims;
 using AdeiesApplication.Domain;
 using AdeiesApplication.Resources;
 using AdeiesApplication.Persistance;
-using System;
-using System.Linq;
 
 namespace AdeiesApplication.Controllers.Api
 {
@@ -26,6 +24,9 @@ namespace AdeiesApplication.Controllers.Api
             _vacationRepository = vacationRepository;
             _sharedResourceLocalizer = stringLocalizer;
         }
+        /// <summary>
+        /// User gets one of his vacation by vacation_id
+        /// </summary>
         [HttpGet("GetVacation/{id}")]
         public async Task<IActionResult> GetVacation(int id)
         {
@@ -38,6 +39,9 @@ namespace AdeiesApplication.Controllers.Api
             var vacationDto = vacation.ToDto();
             return Ok(vacationDto);
         }
+        /// <summary>
+        /// Get all vacations from database, as administrator.
+        /// </summary>
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
@@ -52,7 +56,9 @@ namespace AdeiesApplication.Controllers.Api
             }
             return Ok(vacationsDto);
         }
-
+        /// <summary>
+        /// Manager get vacation from database.
+        /// </summary>
         [Authorize(Roles = "Manager")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingle(int id)
@@ -62,7 +68,9 @@ namespace AdeiesApplication.Controllers.Api
             return Ok(vacationDto);
         }
 
-
+        /// <summary>
+        /// Manager get all vacations from database that manage.
+        /// </summary>
         [Authorize(Roles = "Manager")]
         [HttpGet("ManagedVac")]
         public async Task<IActionResult> GetAllAsync()
@@ -81,7 +89,9 @@ namespace AdeiesApplication.Controllers.Api
             return Ok(vacationsDto);
         }
 
-
+        /// <summary>
+        /// User create a vacation.
+        /// </summary>
         [HttpPost("Create")]
         public async Task<IActionResult> Create(VacationDto vacation)
         {
@@ -121,7 +131,9 @@ namespace AdeiesApplication.Controllers.Api
             vacationRequest = await _vacationRepository.AddAsync(vacationRequest);
             return Ok(vacationRequest);
         }
-
+        /// <summary>
+        /// Manager update vacation status and vacation type by vacation_id.
+        /// </summary>
         [Authorize(Roles = "Manager")]
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> Update([FromForm] string status,[FromForm] string type, int id)
@@ -214,11 +226,14 @@ namespace AdeiesApplication.Controllers.Api
                 vacations.Add(vacation);
             }
             vacation = await _vacationRepository.UpdateAsync(vacation);
+
             var vacationDto = vacation.ToDto();
             return Ok(vacationDto);
         }
 
-        //user can delete only his vacation
+        /// <summary>
+        /// User delete his vacation by vacation_id.
+        /// </summary>        
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {

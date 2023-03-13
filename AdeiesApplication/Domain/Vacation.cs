@@ -9,7 +9,9 @@ namespace AdeiesApplication.Domain {
     {
         [Key]
         public int Id { get; set; }
+#pragma warning disable CS8618 // Non-nullable property 'Petitioner' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
         public virtual User Petitioner { get; set; }
+#pragma warning restore CS8618 // Non-nullable property 'Petitioner' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
         public int PetitionerId { get; set; }
         public DateTime StartDate { get; set; } 
         public DateTime EndDate { get; set; } 

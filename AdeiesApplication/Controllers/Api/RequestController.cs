@@ -20,14 +20,19 @@ namespace AdeiesApplication.Controllers.Api
             _userRepository = userRepository;
             _sharedResourceLocalizer = sharedResourceLocalizer;
         }
-        //watch user's request with httpcontext
+        /// <summary>
+        /// Get a registration request as administrator by id
+        /// </summary>
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetSingle(int id)
         {
             var request = await _requestRepository.GetByIdAsync(id);
             return Ok(request);
         }
-
+        /// <summary>
+        /// Get all registration requests from database as administrator.
+        /// </summary>
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllAsync()
@@ -35,7 +40,9 @@ namespace AdeiesApplication.Controllers.Api
             var requests = await _requestRepository.GetAllAsync();
             return Ok(requests);
         }
-
+        /// <summary>
+        /// Update request condition as administrator by id.
+        /// </summary>
         [Authorize(Roles = "Admin")]
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> Update([FromForm] RequestCondition condition, int id)
@@ -75,8 +82,11 @@ namespace AdeiesApplication.Controllers.Api
            
             return Ok(request);
         }
-
+        /// <summary>
+        /// Delete registration request as administrator by user_id.
+        /// </summary>
         [HttpDelete("Delete/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             RegistrationRequest request = await _requestRepository.DeleteAsync(id);

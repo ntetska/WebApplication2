@@ -25,7 +25,9 @@ public class AuthController : ControllerBase
         _passwordHasher = passwordHasher;
         _sharedResourceLocalizer = stringLocalizer;
     }
-
+    /// <summary>
+    /// login only with username and password which exists in database.
+    /// </summary>
     [AllowAnonymous]
     [HttpPost("Login")]
     public async Task<IActionResult> Login([FromForm] string username, [FromForm] string password)
@@ -61,7 +63,9 @@ public class AuthController : ControllerBase
             new ClaimsPrincipal(claimsIdentity));
         return Ok();
     }
-
+    /// <summary>
+    /// Log Out.
+    /// </summary>
     [HttpGet("Logout")]
     public async Task<IActionResult> Logout()
     {
@@ -70,7 +74,9 @@ public class AuthController : ControllerBase
 
         return Ok();
     }
-
+    /// <summary>
+    /// Access denied.
+    /// </summary>
     [HttpGet("AccessDenied")]
     public IActionResult AccessDenied()
     {

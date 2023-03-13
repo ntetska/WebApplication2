@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using System.Globalization;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 internal class Program
 {
@@ -54,7 +56,18 @@ internal class Program
         builder.Services.AddScoped<RequestRepository>();
         builder.Services.AddScoped<VacationRepository>();
         builder.Services.AddScoped<PasswordHasher<UserCreate>>();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Version = "v1",
+                Title = "Swagger Api",
+                Description = "A simple example ASP.NET Core Web Api",
+            });
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            c.IncludeXmlComments(xmlPath);
+        });
 
         var app = builder.Build();
 
@@ -78,10 +91,15 @@ internal class Program
 
         // Swagger is needed for now and since we run a Release configuration
         // for now we will place it here
-        app.UseSwagger();
+        app.UseSwagger(options =>
+        {
+            options.SerializeAsV2 = true;
+        });
         app.UseSwaggerUI(c =>
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            //c.RoutePrefix = string.Empty;
+
         });
 
         // In case we use HTTPS
@@ -90,7 +108,9 @@ internal class Program
 
 
         app.UseRouting();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         app.UseRequestLocalization(app.Services.GetService<IOptions<RequestLocalizationOptions>>().Value);    
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
         app.UseAuthentication();
         app.UseAuthorization();

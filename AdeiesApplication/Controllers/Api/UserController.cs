@@ -26,7 +26,9 @@ namespace AdeiesApplication.Controllers.Api
             _passwordHasher = passwordHasher;
             _sharedResourceLocalizer= sharedResourceLocalizer;
         }
-
+        /// <summary>
+        /// User gets his data from database
+        /// </summary>
         [HttpGet("GetUser")]
         public async Task<IActionResult> GetUser()
         {
@@ -35,7 +37,9 @@ namespace AdeiesApplication.Controllers.Api
             var userDto = user.ToDTO();
             return Ok(userDto);
         }
-
+        /// <summary>
+        /// Administrator get one user from database, by user_id.
+        /// </summary>
         [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingle(int id)
@@ -48,9 +52,12 @@ namespace AdeiesApplication.Controllers.Api
             var userDto = user.ToDTO();
             return Ok(userDto);
         }
-
+        /// <summary>
+        /// Get all users from database, as administrator.
+        /// </summary>
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAll")]
+        //[ProducesResponseType(typeof(List<UserDTO>),StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
         {
             var users = await _userRepository.GetAllAsync();
@@ -62,7 +69,9 @@ namespace AdeiesApplication.Controllers.Api
             }
             return Ok(userDTOs);
         }
-
+        /// <summary>
+        /// The manager gets the users he manages.
+        /// </summary>
         [Authorize(Roles = "Manager")]
         [HttpGet("GetManagedUsers")]
         public async Task<IActionResult> GetAllAsync()
@@ -83,7 +92,9 @@ namespace AdeiesApplication.Controllers.Api
             }
             return Ok(ManagedUsers);
         }
-
+        /// <summary>
+        /// User Registration
+        /// </summary>
         [AllowAnonymous]
         [HttpPost("Create")]
         public async Task<IActionResult> Create(UserCreate userCreate)
@@ -126,7 +137,9 @@ namespace AdeiesApplication.Controllers.Api
             var userDto = user.ToDTO();
             return Ok(userDto);
         }
-
+        /// <summary>
+        /// Update user's role and the user gets a manager, as administrator.
+        /// </summary>
         [Authorize(Roles = "Admin")]
         [HttpPut("AUpdate/{id}")]
         public async Task<IActionResult> Update( int id , [FromForm] UserRole? role = null , [FromForm] int? managerId = null)
@@ -150,7 +163,9 @@ namespace AdeiesApplication.Controllers.Api
             var userDto = user.ToDTO();
             return Ok(userDto);
         }
-
+        /// <summary>
+        /// User update his data.
+        /// </summary>
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> Update(UserCreate userCreate, int id)
         {
@@ -159,7 +174,6 @@ namespace AdeiesApplication.Controllers.Api
             {
                 return StatusCode(StatusCodes.Status401Unauthorized, "Unathorized user");
             }
-            //var user = await _userRepository.GetByIdAsync(Int32.Parse(id));
             User user = await _userRepository.GetByIdAsync(id);
 
             //check the required fields
@@ -195,7 +209,9 @@ namespace AdeiesApplication.Controllers.Api
             var userDto = user.ToDTO();
             return Ok(userDto);
         }
-
+        /// <summary>
+        /// Delete user as administrator by user_id
+        /// </summary>
         [Authorize(Roles = "Admin")]
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
