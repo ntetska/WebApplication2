@@ -11,7 +11,7 @@ using System.Linq;
 namespace AdeiesApplication.Controllers.Api
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("backend_api/[controller]")]
     [ApiController]
     public class VacationController : ControllerBase
     {

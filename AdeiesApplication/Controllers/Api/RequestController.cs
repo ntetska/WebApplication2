@@ -7,7 +7,7 @@ using AdeiesApplication.Persistance;
 
 namespace AdeiesApplication.Controllers.Api
 {
-    [Route("api/[controller]")]
+    [Route("backend_api/[controller]")]
     [ApiController]
     public class RequestController : ControllerBase
     {

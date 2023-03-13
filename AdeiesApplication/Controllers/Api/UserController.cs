@@ -10,7 +10,7 @@ using AdeiesApplication.Persistance;
 
 namespace AdeiesApplication.Controllers.Api
 {
-    [Route("api/[controller]")]
+    [Route("backend_api/[controller]")]
     [ApiController]
     [Authorize]
     public class UserController : ControllerBase

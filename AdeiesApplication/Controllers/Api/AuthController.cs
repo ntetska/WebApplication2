@@ -8,10 +8,9 @@ using AdeiesApplication.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using AdeiesApplication.Resources;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AdeiesApplication.Controllers.Api;
-[Route("api/[controller]")]
+[Route("backend_api/[controller]")]
 [ApiController]
 [Authorize]
 public class AuthController : ControllerBase
