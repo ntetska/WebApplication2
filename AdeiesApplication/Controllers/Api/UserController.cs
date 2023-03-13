@@ -41,7 +41,12 @@ namespace AdeiesApplication.Controllers.Api
         public async Task<IActionResult> GetSingle(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
-            return Ok(user);
+            if (user == null)
+            {
+                return BadRequest(_sharedResourceLocalizer["Error"].Value);
+            }
+            var userDto = user.ToDTO();
+            return Ok(userDto);
         }
 
         [Authorize(Roles = "Admin")]
@@ -124,13 +129,23 @@ namespace AdeiesApplication.Controllers.Api
 
         [Authorize(Roles = "Admin")]
         [HttpPut("AUpdate/{id}")]
-        public async Task<IActionResult> Update([FromForm] UserRole Role, [FromForm] int managerId , int id)
+        public async Task<IActionResult> Update( int id , [FromForm] UserRole? role = null , [FromForm] int? managerId = null)
         {
+            if (managerId == null && role == null)
+            {
+                return BadRequest(_sharedResourceLocalizer["Field"].Value);
+            }
             //user gets a manager
             User user = await _userRepository.GetByIdAsync(id);
-            user.Role = Role;
-            User manager = await _userRepository.GetByIdAsync(managerId);
-            user.Manager = manager;
+            if (role != null)
+            {
+                user.Role = role.Value;
+            }
+            if (managerId != null)
+            {
+                User manager = await _userRepository.GetByIdAsync(managerId.Value);
+                user.Manager = manager;
+            }
             await _userRepository.UpdateAsync(user);
             var userDto = user.ToDTO();
             return Ok(userDto);

@@ -58,7 +58,7 @@ internal class Program
         builder.Services.AddScoped<RequestRepository>();
         builder.Services.AddScoped<VacationRepository>();
         builder.Services.AddScoped<PasswordHasher<UserCreate>>();
-
+        builder.Services.AddSwaggerDocument();
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
@@ -83,15 +83,17 @@ internal class Program
 
 		// Swagger is needed for now and since we run a Release configuration
 		// for now we will place it here
-		app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-        });
+		//app.UseSwagger();
+  //      app.UseSwaggerUI(c =>
+  //      {
+  //          c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+  //      });
 
 		// In case we use HTTPS
 		//app.UseHttpsRedirection();
 		app.UseStaticFiles();
+        app.UseOpenApi();
+        app.UseSwaggerUi3();
 
         app.UseRouting();
         app.UseRequestLocalization(app.Services.GetService<IOptions<RequestLocalizationOptions>>().Value);    

@@ -5,6 +5,8 @@ using System.Security.Claims;
 using AdeiesApplication.Domain;
 using AdeiesApplication.Resources;
 using AdeiesApplication.Persistance;
+using System;
+using System.Linq;
 
 namespace AdeiesApplication.Controllers.Api
 {
@@ -99,8 +101,15 @@ namespace AdeiesApplication.Controllers.Api
                 }
             }
             var vacations = await _vacationRepository.GetAllAsync();
-            IEnumerable<Vacation> query = vacations.Where(v => v.Petitioner == petitioner );
+            IEnumerable<Vacation> query = vacations.Where(v => v.Petitioner == petitioner);
             //check validity of days
+            foreach (var item in query)
+            {
+                if (item.StartDate <= vacationRequest.EndDate && vacationRequest.StartDate <= item.EndDate)
+                {
+                    return BadRequest(_sharedResourceLocalizer["Error"].Value);
+                }
+            }
             if (vacation.EndDate < vacation.StartDate)
             {
                 return BadRequest(_sharedResourceLocalizer["falseEndDate"].Value);

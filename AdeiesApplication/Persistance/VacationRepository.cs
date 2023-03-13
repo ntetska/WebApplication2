@@ -33,11 +33,11 @@ namespace AdeiesApplication.Persistance
             //var result = await _context.Vacation.ToListAsync();
             return result;
         }
-        //public async Task<List<Vacation>?> GetMyVacationsAsync()
-        //{
-        //    var MyVacations = await _context.Vacation.Include(x => x.Petitioner).ToListAsync();
-        //    return MyVacations;
-        //}
+        public async Task<List<Vacation>?> GetMyVacationsAsync()
+        {
+            var MyVacations = await _context.Vacation.Include(x => x.Petitioner).ToListAsync();
+            return MyVacations;
+        }
         public async Task<Vacation?> GetByIdAsync(int id)
         {
             var result = await _context.Vacation.Where(v => v.Id == id).Include(x => x.Petitioner).ThenInclude(x => x.Manager).FirstOrDefaultAsync();

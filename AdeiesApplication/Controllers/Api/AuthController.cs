@@ -8,6 +8,7 @@ using AdeiesApplication.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using AdeiesApplication.Resources;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AdeiesApplication.Controllers.Api;
 [Route("api/[controller]")]
@@ -16,10 +17,10 @@ namespace AdeiesApplication.Controllers.Api;
 public class AuthController : ControllerBase
 {
     private readonly UserRepository _userRepository;
-    private readonly PasswordHasher<User> _passwordHasher;
+    private readonly PasswordHasher<UserCreate> _passwordHasher;
     private readonly IStringLocalizer<Localizer> _sharedResourceLocalizer;
 
-    public AuthController(UserRepository userRepository, PasswordHasher<User> passwordHasher, IStringLocalizer<Localizer> stringLocalizer)
+    public AuthController(UserRepository userRepository, PasswordHasher<UserCreate> passwordHasher, IStringLocalizer<Localizer> stringLocalizer)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
@@ -36,7 +37,8 @@ public class AuthController : ControllerBase
         {
             return Unauthorized(_sharedResourceLocalizer["WrongData"].Value);
         }
-        var result = _passwordHasher.VerifyHashedPassword(user, user.Password, password);
+        var userCreate = user.ToCreate();
+        var result = _passwordHasher.VerifyHashedPassword(userCreate, userCreate.Password, password);
         //check user's password & activity
         if (result == PasswordVerificationResult.Failed)
         {
