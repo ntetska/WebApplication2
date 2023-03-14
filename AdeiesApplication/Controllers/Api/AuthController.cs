@@ -32,7 +32,6 @@ public class AuthController : ControllerBase
     [HttpPost("Login")]
     public async Task<IActionResult> Login([FromForm] string username, [FromForm] string password)
     {
-
         var user = await _userRepository.GetByUsernameAsync(username);
         if (user == null)
         {

@@ -9,16 +9,14 @@ namespace AdeiesApplication.Domain {
     {
         [Key]
         public int Id { get; set; }
-#pragma warning disable CS8618 // Non-nullable property 'Petitioner' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
         public virtual User Petitioner { get; set; }
-#pragma warning restore CS8618 // Non-nullable property 'Petitioner' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
         public int PetitionerId { get; set; }
         public DateTime StartDate { get; set; } 
-        public DateTime EndDate { get; set; } 
-        public double AnnualLeave { get; set; } = 21;
-        public double ParentalLeave { get; set; } = 2;
-        public double SickLeave { get; set; } = 12;
-        public double StudyLeave { get; set; } = 18;
+        public DateTime EndDate { get; set; }
+        public double AnnualLeave { get; set; } = default;
+        public double ParentalLeave { get; set; } = default;
+        public double SickLeave { get; set; } = default;
+        public double StudyLeave { get; set; } = default;
         public VacationType Type { get; set; } 
         public VacationStatus Status { get; set; } = VacationStatus.Pending;
 
@@ -32,9 +30,6 @@ namespace AdeiesApplication.Domain {
             };
         }
     }
-
-
-
     public class VacationDto
     {
         public int PetitionerId { get; set; }
@@ -53,7 +48,6 @@ namespace AdeiesApplication.Domain {
             return vacation;
         }
     }
-
     [JsonConverter(typeof(StringEnumConverter))]
     public enum VacationStatus
     {
@@ -61,7 +55,6 @@ namespace AdeiesApplication.Domain {
         Accepted,
         Rejected
     }
-
     [JsonConverter(typeof(StringEnumConverter))]
     public enum VacationType
     {

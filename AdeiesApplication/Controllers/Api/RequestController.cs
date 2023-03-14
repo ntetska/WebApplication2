@@ -21,7 +21,7 @@ namespace AdeiesApplication.Controllers.Api
             _sharedResourceLocalizer = sharedResourceLocalizer;
         }
         /// <summary>
-        /// Get a registration request as administrator by id
+        /// Admin gets a registration request of a user by request_id.
         /// </summary>
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
@@ -31,7 +31,7 @@ namespace AdeiesApplication.Controllers.Api
             return Ok(request);
         }
         /// <summary>
-        /// Get all registration requests from database as administrator.
+        /// Admin gets a list of all requests from the database.
         /// </summary>
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAll")]
@@ -41,11 +41,11 @@ namespace AdeiesApplication.Controllers.Api
             return Ok(requests);
         }
         /// <summary>
-        /// Update request condition as administrator by id.
+        /// Admin update request condition by request_id and user gets his hire date. The condition has default value of pending and can get the value of accepted and rejected.
         /// </summary>
         [Authorize(Roles = "Admin")]
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> Update([FromForm] RequestCondition condition, int id)
+        public async Task<IActionResult> Update([FromForm] RequestCondition condition,[FromForm] DateOnly hiredate, int id)
         {
             //if (condition == null)
             //    return BadRequest();
@@ -53,7 +53,7 @@ namespace AdeiesApplication.Controllers.Api
 
             if (request == null)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return BadRequest(_sharedResourceLocalizer["Error"].Value);
             }
 
             if (condition == RequestCondition.Accepted)
@@ -61,10 +61,11 @@ namespace AdeiesApplication.Controllers.Api
                 request.Condition = RequestCondition.Accepted;
                 User userToBeActive = await _userRepository.GetByIdAsync(request.ApplicantId);
                 userToBeActive.IsActive = true;
+                userToBeActive.HireDate = hiredate.ToDateTime(new TimeOnly(0, 0));
                 userToBeActive = await _userRepository.UpdateAsync(userToBeActive);
                 if (userToBeActive == null)
                 {
-                    return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                    return BadRequest(_sharedResourceLocalizer["Error"].Value);
                 }
             }
             else
@@ -83,7 +84,7 @@ namespace AdeiesApplication.Controllers.Api
             return Ok(request);
         }
         /// <summary>
-        /// Delete registration request as administrator by user_id.
+        /// Admin delete the request by request_id.
         /// </summary>
         [HttpDelete("Delete/{id}")]
         [Authorize(Roles = "Admin")]
@@ -92,7 +93,7 @@ namespace AdeiesApplication.Controllers.Api
             RegistrationRequest request = await _requestRepository.DeleteAsync(id);
             if (request == null)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return BadRequest(_sharedResourceLocalizer["Error"].Value);
             }
             return Ok(request);
         }

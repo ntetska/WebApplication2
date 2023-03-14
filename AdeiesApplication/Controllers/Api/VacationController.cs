@@ -40,7 +40,7 @@ namespace AdeiesApplication.Controllers.Api
             return Ok(vacationDto);
         }
         /// <summary>
-        /// Get all vacations from database, as administrator.
+        /// Admin gets a list of all vacations from the database.
         /// </summary>
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAll")]
@@ -57,7 +57,7 @@ namespace AdeiesApplication.Controllers.Api
             return Ok(vacationsDto);
         }
         /// <summary>
-        /// Manager get vacation from database.
+        /// Manager get user's vacation from database by vacation_id.
         /// </summary>
         [Authorize(Roles = "Manager")]
         [HttpGet("{id}")]
@@ -69,7 +69,7 @@ namespace AdeiesApplication.Controllers.Api
         }
 
         /// <summary>
-        /// Manager get all vacations from database that manage.
+        /// Manager gets a list of all vacations he manages from the database.
         /// </summary>
         [Authorize(Roles = "Manager")]
         [HttpGet("ManagedVac")]
@@ -90,7 +90,8 @@ namespace AdeiesApplication.Controllers.Api
         }
 
         /// <summary>
-        /// User create a vacation.
+        /// User create a vacation (petitioner_id,StartDate,EndDate).
+        /// petitioner_id == user_id.
         /// </summary>
         [HttpPost("Create")]
         public async Task<IActionResult> Create(VacationDto vacation)
@@ -129,10 +130,13 @@ namespace AdeiesApplication.Controllers.Api
                 vacationRequest.Status = VacationStatus.Accepted;
             }
             vacationRequest = await _vacationRepository.AddAsync(vacationRequest);
-            return Ok(vacationRequest);
+            VacationDto vacationDto = vacationRequest.ToDto();
+            return Ok(vacationDto);
         }
         /// <summary>
-        /// Manager update vacation status and vacation type by vacation_id.
+        /// Manager update vacation status and vacation type of a user's vacation by vacation_id. 
+        /// Vacation status has default value pending and can get the value of accepted and rejected.
+        /// Vacation type has default value annual and can get the value of parental,sick and study.
         /// </summary>
         [Authorize(Roles = "Manager")]
         [HttpPut("Update/{id}")]
@@ -152,7 +156,7 @@ namespace AdeiesApplication.Controllers.Api
             var user = await _userRepository.GetByIdAsync(int.Parse(userCookieID));
             if (vacation == null)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return BadRequest(_sharedResourceLocalizer["Error"].Value);
             }
             if (vacation.Status != VacationStatus.Pending)
             {

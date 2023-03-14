@@ -27,7 +27,7 @@ namespace AdeiesApplication.Controllers.Api
             _sharedResourceLocalizer= sharedResourceLocalizer;
         }
         /// <summary>
-        /// User gets his data from database
+        /// User gets his data (username,first and last name,phone number and email) from database.
         /// </summary>
         [HttpGet("GetUser")]
         public async Task<IActionResult> GetUser()
@@ -38,7 +38,7 @@ namespace AdeiesApplication.Controllers.Api
             return Ok(userDto);
         }
         /// <summary>
-        /// Administrator get one user from database, by user_id.
+        /// Admin gets a user's data from the database, by user_id.
         /// </summary>
         [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
@@ -53,11 +53,10 @@ namespace AdeiesApplication.Controllers.Api
             return Ok(userDto);
         }
         /// <summary>
-        /// Get all users from database, as administrator.
+        /// Admin gets a list of all users from the database.
         /// </summary>
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAll")]
-        //[ProducesResponseType(typeof(List<UserDTO>),StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
         {
             var users = await _userRepository.GetAllAsync();
@@ -70,7 +69,7 @@ namespace AdeiesApplication.Controllers.Api
             return Ok(userDTOs);
         }
         /// <summary>
-        /// The manager gets the users he manages.
+        /// Manager gets a list of users he manages.
         /// </summary>
         [Authorize(Roles = "Manager")]
         [HttpGet("GetManagedUsers")]
@@ -93,7 +92,7 @@ namespace AdeiesApplication.Controllers.Api
             return Ok(ManagedUsers);
         }
         /// <summary>
-        /// User Registration
+        /// User registration with required fields username,password,firstname,lastname,phone number and email.
         /// </summary>
         [AllowAnonymous]
         [HttpPost("Create")]
@@ -138,7 +137,7 @@ namespace AdeiesApplication.Controllers.Api
             return Ok(userDto);
         }
         /// <summary>
-        /// Update user's role and the user gets a manager, as administrator.
+        /// Admin update the role of a user and give him a manager by manager_Id.
         /// </summary>
         [Authorize(Roles = "Admin")]
         [HttpPut("AUpdate/{id}")]
@@ -164,7 +163,7 @@ namespace AdeiesApplication.Controllers.Api
             return Ok(userDto);
         }
         /// <summary>
-        /// User update his data.
+        /// User update his data (username,password,firstname,lastname,phone number and email) by his user_id.
         /// </summary>
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> Update(UserCreate userCreate, int id)
@@ -210,7 +209,7 @@ namespace AdeiesApplication.Controllers.Api
             return Ok(userDto);
         }
         /// <summary>
-        /// Delete user as administrator by user_id
+        /// Admin delete user by user_id.
         /// </summary>
         [Authorize(Roles = "Admin")]
         [HttpDelete("Delete/{id}")]
@@ -219,8 +218,8 @@ namespace AdeiesApplication.Controllers.Api
 			User user = await _userRepository.DeleteAsync(id);
 			if (user == null)
 			{
-				return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-			}
+                return BadRequest(_sharedResourceLocalizer["Error"].Value);
+            }
             var userDto = user.ToDTO();
 			return Ok(userDto);
 		}

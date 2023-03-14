@@ -136,7 +136,7 @@
     <value>Η αρχική μερα θα πρέπει να προηγείται της τελευταίας μέρας άδειας.</value>
   </data>
   <data name="Field" xml:space="preserve">
-    <value>Το πεδίο είναι μηδενικό.</value>
+    <value>Το πεδίο είναι κενό.</value>
   </data>
   <data name="notAccess" xml:space="preserve">
     <value>Δεν επιτρέπεται η πρόσβαση!</value>
